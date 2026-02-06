@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -14,24 +7,108 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  passwordHash  String    // храним хеш (bcrypt / argon2)
-  role          Role      @default(CUSTOMER)
-  name          String?
-  phone         String?
-  bakeryName    String?   // только для owner
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+enum Role {
+  CUSTOMER
+  OWNER
+}
 
-  // Можно добавить заказы позже
-  // orders        Order[]
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  passwordHash String
+  role       Role     @default(CUSTOMER)
+  name       String?
+  phone      String?
+  bakeryName String?  // только для владельцев
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  generations Generation[]
+  orders      Order[]
 
   @@map("users")
 }
 
-enum Role {
-  CUSTOMER
-  OWNER
+model Catalog {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  image       String? // URL изображения торта
+  price       Decimal @db.Decimal(10, 2)
+  composition String?
+  kcal        Int?
+  protein     Decimal? @db.Decimal(5, 2)
+  fats        Decimal? @db.Decimal(5, 2)
+  carbs       Decimal? @db.Decimal(5, 2)
+
+  orderCatalog OrderCatalog[]
+
+  @@map("catalog")
+}
+
+model Generation {
+  id        String   @id @default(uuid())
+  prompt    String
+  image     String?  // URL сгенерированного изображения
+  userId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("generations")
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  userId    String
+  design    String?  // описание дизайна или ссылка
+  status    String   // "new", "in_progress", "completed", "cancelled" и т.д.
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderCatalog  OrderCatalog[]
+  reviews       Review[]
+
+  @@index([userId])
+  @@map("orders")
+}
+
+model OrderCatalog {
+  orderId   String
+  catalogId String
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  catalog Catalog @relation(fields: [catalogId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, catalogId])
+  @@map("order_catalog")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  orderId   String
+  mark      Int      // 1–5
+  text      String?
+  createdAt DateTime @default(now())
+
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  answers   Answer[]
+
+  @@index([orderId])
+  @@map("reviews")
+}
+
+model Answer {
+  id        String   @id @default(uuid())
+  reviewId  String
+  text      String
+  createdAt DateTime @default(now())
+
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([reviewId])
+  @@map("answers")
 }
