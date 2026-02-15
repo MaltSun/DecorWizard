@@ -1,0 +1,20 @@
+{
+  "main": "Main",
+  "catalog": "Catalog",
+  "result": "Result",
+  "generate": "Generate",
+  "history": "History",
+  "prompt_placeholder": "Enter your prompt here...",
+  "loading": "Loading...",
+  "error": "An error occurred. Please try again.",
+  "no_results": "No results found.",
+  "try_again": "Try Again",
+  "yes": "Yes",
+  "no": "No",
+  "idk": "idk",
+  "maybe": "Maybe",
+  "welcome_message": "Welcome to DecorWizard! Your AI-powered interior design assistant. ",
+  "start_building": "Are you ready to start building your dream?",
+  "step": "Step",
+  "how_we_work": "How we are work"
+}
