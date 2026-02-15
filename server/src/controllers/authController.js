@@ -61,3 +61,7 @@ export const login = async (req, res) => {
     user: { id: user.id, email: user.email, role: user.role, name: user.name },
   });
 };
+
+export const test = async (req, res) => {
+  res.json({ message: "Logout endpoint is under construction" });
+};
