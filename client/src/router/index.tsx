@@ -9,7 +9,7 @@ const Result = React.lazy(() => import('../pages/Result/Result'));
 const History = React.lazy(() => import('../pages/GenerationHistory/GenerationHistory'));
 const ForgotPassword = React.lazy(() => import('../pages/ForgotPassword/ForgotPassword'));
 const Authorization = React.lazy(() => import('../pages/Authorization/Authorization'));
-const Registration = React.lazy(() => import('../pages/Registration/Registration'));
+const Registration = React.lazy(() => import('../pages/Signup/Signup'));
 
 const Loader = () => (
   <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
