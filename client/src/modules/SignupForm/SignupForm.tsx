@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
 import { BoxForm, FormButton, FormPaper, FormStack } from '../AuthForm/style';
 import { SignupUserSchema, type SignupFormData } from './type';
+import { saveAuthData } from '../../utils/authUtils';
 
 const SignupForm = () => {
   const {
@@ -21,29 +22,49 @@ const SignupForm = () => {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      const response = await fetch('/auth/signup', {
+      // Удаляем confirmPassword перед отправкой на сервер
+      // Устанавливаем роль по умолчанию, если не указана
+      const { confirmPassword, ...signupData } = data;
+      const dataToSend = {
+        ...signupData,
+        role: signupData.role || 'CUSTOMER',
+      };
+      
+      const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataToSend),
       });
+
+      const result = await response.json();
+
       if (!response.ok) {
-        toast.error(`${response.status}`, {
+        toast.error(result.error || t('common:error') || 'Ошибка регистрации', {
           position: 'top-center',
           autoClose: 5000,
           theme: 'light',
           transition: Bounce,
         });
-      } else {
-        const result = await response.json();
-        toast.success(`${result.message}`, {
-          position: 'top-center',
-          autoClose: 3000,
-          theme: 'colored',
-        });
-        navigate(AppRoutes.Login);
+        return;
       }
-    } catch (error) {
-      toast.error(`${error}`, {
+
+      // Сохраняем токен и данные пользователя
+      saveAuthData({
+        token: result.token,
+        user: result.user,
+      });
+
+      toast.success(t('auth:registrationSuccess') || 'Регистрация успешна!', {
+        position: 'top-center',
+        autoClose: 3000,
+        theme: 'colored',
+        transition: Bounce,
+      });
+
+      // Перенаправляем на главную страницу после успешной регистрации
+      navigate(AppRoutes.Main);
+    } catch (error: any) {
+      toast.error(error.message || t('common:error') || 'Произошла ошибка', {
         position: 'top-center',
         autoClose: 5000,
         theme: 'light',

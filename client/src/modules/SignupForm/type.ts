@@ -30,7 +30,7 @@ export const SignupUserSchema = z.object({
   name: z.string().min(2, { message: 'Минимум 2 символа' }),
   phone: z.string().min(9, { message: 'Некорректный номер' }).optional(),
   password: z.string().min(6, { message: 'Минимум 6 символов' }),
-  role: z.enum(['CUSTOMER', 'OWNER']),
+  role: z.enum(['CUSTOMER', 'OWNER']).optional(),
   bakeryName: z.string().optional(),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
