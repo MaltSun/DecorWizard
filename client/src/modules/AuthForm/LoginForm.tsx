@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-// import { useLazyLogin } from '../../graphql/queries/login';
 import { TextField } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
@@ -9,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { BoxForm, FormButton, FormPaper, FormStack } from './style';
 import { LoginUserSchema, type LoginFormData } from './type';
 import theme from '../../../theme/theme';
+import { saveAuthData } from '../../utils/authUtils';
 
 const LoginForm = () => {
   const {
@@ -26,51 +26,50 @@ const LoginForm = () => {
   };
 
   const { t } = useTranslation(['auth', 'common']);
-  // const [login, { loading }] = useLazyLogin();
 
   const onSubmit = async (data: LoginFormData) => {
-    // try {
-    //   const response = await login({
-    //     variables: {
-    //       auth: {
-    //         email: data.email,
-    //         password: data.password,
-    //       },
-    //     },
-    //   });
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-    //   if (!response.data) return;
+      const result = await response.json();
 
-    //   const { email, id, role } = response.data.login.user;
-    //   const { avatar, full_name, last_name, first_name } =
-    //     response.data.login.user.profile;
-    //   sessionStorage.setItem('access_token', response.data.login.access_token);
-    //   sessionStorage.setItem(
-    //     'refresh_token',
-    //     response.data.login.refresh_token,
-    //   );
-    //   sessionStorage.setItem(
-    //     'user',
-    //     JSON.stringify({
-    //       id,
-    //       email,
-    //       role,
-    //       full_name,
-    //       avatar,
-    //       first_name,
-    //       last_name,
-    //     }),
-    //   );
+      if (!response.ok) {
+        toast.error(result.error || t('auth:loginError') || 'Неверный email или пароль', {
+          position: 'top-center',
+          autoClose: 5000,
+          theme: 'dark',
+          transition: Bounce,
+        });
+        return;
+      }
 
-    //   navigate(AppRoutes.Users.Path);
-    // } catch (error) {
-    //   toast.error(`${error}`, {
-    //     position: 'top-center',
-    //     autoClose: 5000,
-    //     theme: 'dark',
-    //     transition: Bounce,
-    //   });
-    // }
+      // Сохраняем токен и данные пользователя
+      saveAuthData({
+        token: result.token,
+        user: result.user,
+      });
+
+      toast.success(t('auth:loginSuccess') || 'Вход выполнен успешно!', {
+        position: 'top-center',
+        autoClose: 3000,
+        theme: 'colored',
+        transition: Bounce,
+      });
+
+      // Перенаправляем на главную страницу после успешного входа
+      navigate(AppRoutes.Main);
+    } catch (error: any) {
+      toast.error(error.message || t('common:error') || 'Произошла ошибка', {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
+    }
   };
 
   return (

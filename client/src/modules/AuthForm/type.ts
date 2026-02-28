@@ -6,6 +6,6 @@ export type LoginFormData = {
 };
 
 export const LoginUserSchema = z.object({
-  email: z.email('Invalid email address').nonempty('Email is required'),
-  password: z.string().nonempty('Password is required'),
+  email: z.string().email('Некорректный email').min(1, 'Email обязателен'),
+  password: z.string().min(1, 'Пароль обязателен'),
 });

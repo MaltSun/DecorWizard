@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import {config} from '../config/index.js'; 
+import { prisma } from '../config/prisma.js';
 
 export const authenticate = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -10,7 +10,7 @@ export const authenticate = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await config.user.findUnique({ where: { id: decoded.id } });
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
 
     if (!user) {
       return res.status(401).json({ error: 'Пользователь не найден' });
@@ -19,6 +19,7 @@ export const authenticate = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
+    console.error("Authentication error:", err);
     return res.status(401).json({ error: 'Недействительный токен' });
   }
 };
