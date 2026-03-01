@@ -9,7 +9,7 @@ export const ItemCard = styled(Box)(({ theme }) => ({
     background: theme.palette.background.default,
     padding: theme.spacing(4),
     borderRadius: '15px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    boxShadow: theme.shadows[1],
     gap: theme.spacing(2),
     color: theme.palette.text.secondary
 }))

@@ -19,7 +19,7 @@ export const AuthHeaderButtonGroup = styled(ButtonGroup)(({ theme }) => ({
     background: 'transparent',
 
     '&:hover': {
-      background: 'rgba(255, 123, 106, 0.12)', // лёгкий #FF7B6A
+      background: theme.palette.action.hover,
       color: theme.palette.text.secondary,
     },
 
@@ -31,7 +31,7 @@ export const AuthHeaderButtonGroup = styled(ButtonGroup)(({ theme }) => ({
     },
 
     '&:active': {
-      background: 'rgba(91, 91, 91, 0.18)',
+      background: theme.palette.action.selected,
     },
   },
 }));

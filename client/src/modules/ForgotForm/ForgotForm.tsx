@@ -19,7 +19,7 @@ const ForgotForm = () => {
     resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth', 'common']);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ const ForgotForm = () => {
         throw new Error(result.error || 'Не удалось отправить письмо');
       }
 
-      toast.success(t('authorisation:emailSent') || 'We sent an email!', {
+      toast.success(t('auth:emailSent') || 'Письмо отправлено!', {
         position: 'top-center',
         autoClose: 5000,
         theme: 'dark',

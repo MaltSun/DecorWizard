@@ -158,18 +158,18 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
           onClick={handleGenerate}
           disabled={loading || !prompt.trim()}
           startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
-          sx={{
+          sx={theme => ({
             padding: '12px 40px',
             fontSize: '1.2rem',
             fontFamily: '"Katibeh", serif',
-            backgroundColor: '#FD8E53',
+            backgroundColor: theme.palette.primary.main,
             '&:hover': {
-              backgroundColor: '#FF7B6A',
+              backgroundColor: theme.palette.text.secondary,
             },
             '&:disabled': {
-              backgroundColor: '#F6D8C8',
+              backgroundColor: theme.palette.background.paper,
             },
-          }}
+          })}
         >
           {loading ? 'Loading..' : 'Generate'}
         </Button>
@@ -178,19 +178,20 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
           <ImageContainer>
             {loading ? (
               <Box>
-                <CircularProgress size={60} sx={{ color: '#FD8E53', mb: 2 }} />
+                <CircularProgress size={60} sx={theme => ({ color: theme.palette.primary.main, mb: 2 })} />
               </Box>
             ) : (
-              <img
+              <Box
+                component="img"
                 src={generatedImage}
                 alt="Generated"
-                style={{
+                sx={theme => ({
                   width: '100%',
                   maxWidth: '500px',
                   height: 'auto',
                   borderRadius: '12px',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                }}
+                  boxShadow: theme.shadows[2],
+                })}
               />
             )}
           </ImageContainer>
@@ -203,17 +204,17 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
                 setTimeout(() => handleGenerate(), 100);
               }}
               disabled={loading}
-              sx={{
+              sx={theme => ({
                 width: '40%',
                 fontFamily: '"Katibeh", serif',
                 fontSize: '1.1rem',
-                color: '#fdfaf8ff',
-                borderColor: '#FD8E53',
+                color: theme.palette.text.primary,
+                borderColor: theme.palette.primary.main,
                 '&:hover': {
-                  borderColor: '#FF7B6A',
-                  backgroundColor: 'rgba(253, 143, 83, 0.05)',
+                  borderColor: theme.palette.text.secondary,
+                  backgroundColor: theme.palette.action.hover,
                 },
-              }}
+              })}
             >
               Redo
             </Button>
@@ -222,16 +223,16 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
               variant="contained"
               onClick={handleSubmit}
               disabled={loading}
-              sx={{
+              sx={theme => ({
                 fontFamily: '"Katibeh", serif',
                 fontSize: '1.1rem',
                 width: '40%',
-                borderColor: '#FD8E53',
+                borderColor: theme.palette.primary.main,
                 '&:hover': {
-                  borderColor: '#FF7B6A',
-                  backgroundColor: 'rgba(253, 143, 83, 0.05)',
+                  borderColor: theme.palette.text.secondary,
+                  backgroundColor: theme.palette.action.hover,
                 },
-              }}
+              })}
             >
               Submit
             </Button>

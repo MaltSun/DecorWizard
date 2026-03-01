@@ -1,20 +1,21 @@
 import ReactSlidy from 'react-slidy';
 import React, { useState } from 'react';
 import { SliderProps } from './type.js';
-import { Typography } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { ArticleContainer } from './style.js';
 
 const Slider: React.FC<SliderProps> = ({ content }) => {
+  const theme = useTheme();
   const [actualSlide, setActualSlide] = useState(0);
 
   const updateSlide = ({ currentSlide }) => {
     setActualSlide(currentSlide);
   };
 
-  const createStyles = isActive => ({
+  const createStyles = (isActive: boolean) => ({
     background: 'transparent',
     border: 0,
-    color: isActive ? '#333' : '#ccc',
+    color: isActive ? theme.palette.text.primary : theme.palette.text.disabled,
     cursor: 'pointer',
     fontSize: '32px',
   });
@@ -25,7 +26,6 @@ const Slider: React.FC<SliderProps> = ({ content }) => {
         doAfterSlide={updateSlide}
         slide={actualSlide}
         sx={{
-          background: 'red !default',
           width: '100%',
         }}
         keyboardNavigation

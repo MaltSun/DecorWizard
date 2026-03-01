@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import TreeSurvey from "../TreeSurvey/TreeSurvey";
 import DecorQuestions from "../DecorQuestion/DecorQuestions";
 import { firstTreeRoot } from "../../trees/firstTreeRoot";
@@ -7,6 +8,7 @@ import { thirdTreeRoot } from "../../trees/thirdTreeRoot";
 import { forthTreeRoot } from "../../trees/forthTreeRoot";
 
 const MainSurvey: React.FC = () => {
+  const { t } = useTranslation(["questions", "common"]);
   const [stage, setStage] = useState(1);
   const [collectedTags, setCollectedTags] = useState<
     Record<string, { tag: string; weight: number }[]>
@@ -23,7 +25,7 @@ const MainSurvey: React.FC = () => {
   if (stage === 5) {
     const forthTags = collectedTags["forth"] || [];
     const reasonabilityIndex =
-      forthTags.reduce((acc, t) => acc + t.weight, 0) / (forthTags.length || 1);
+      forthTags.reduce((acc, tag) => acc + tag.weight, 0) / (forthTags.length || 1);
 
     return (
       <DecorQuestions
@@ -37,7 +39,7 @@ const MainSurvey: React.FC = () => {
     case 1:
       return (
         <TreeSurvey
-          treeName="Форма и ярусы"
+          treeName={t("formAndTiers")}
           root={firstTreeRoot()}
           onComplete={(tags) => handleComplete("first", tags)}
         />
@@ -45,7 +47,7 @@ const MainSurvey: React.FC = () => {
     case 2:
       return (
         <TreeSurvey
-          treeName="Цвет и стиль"
+          treeName={t("colorAndStyle")}
           root={secondTreeRoot()}
           onComplete={(tags) => handleComplete("second", tags)}
         />
@@ -53,7 +55,7 @@ const MainSurvey: React.FC = () => {
     case 3:
       return (
         <TreeSurvey
-          treeName="Материалы и акценты"
+          treeName={t("materialsAndAccents")}
           root={thirdTreeRoot()}
           onComplete={(tags) => handleComplete("third", tags)}
         />
@@ -61,7 +63,7 @@ const MainSurvey: React.FC = () => {
     case 4:
       return (
         <TreeSurvey
-          treeName="Разумность"
+          treeName={t("reasonability")}
           root={forthTreeRoot()}
           onComplete={(tags) => handleComplete("forth", tags)}
         />

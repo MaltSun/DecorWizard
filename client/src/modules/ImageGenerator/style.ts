@@ -5,9 +5,9 @@ export const GenerateContainer = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(3),
   padding: theme.spacing(3),
-  backgroundColor: '#FFF',
+  backgroundColor: theme.palette.background.default,
   borderRadius: '16px',
-  boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+  boxShadow: theme.shadows[1],
   maxWidth: '800px',
   margin: '0 auto'
 }));
@@ -57,7 +57,7 @@ export const HistoryItem = styled(Box)<{ active: boolean }>(({ theme, active }) 
   borderRadius: '8px',
   overflow: 'hidden',
   cursor: 'pointer',
-  border: active ? '2px solid #FD8E53' : '1px solid #F6D8C8',
+  border: active ? `2px solid ${theme.palette.primary.main}` : `1px solid ${theme.palette.background.paper}`,
   opacity: active ? 1 : 0.7,
   transition: 'all 0.2s ease',
   '&:hover': {

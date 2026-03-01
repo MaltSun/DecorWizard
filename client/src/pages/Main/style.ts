@@ -28,8 +28,7 @@ export const ContentContainer = styled(Box)(({ theme }) => (
 ))
 
 export const StepsContainer = styled(ContentContainer)(({theme}) => ({
-    paddingTop: theme.spacing(5)
-}))
+    paddingTop: theme.spacing(5)}))
 
 export const HorizontContentContainer = styled(ContentContainer)(() => ({
     flexDirection: 'row',
