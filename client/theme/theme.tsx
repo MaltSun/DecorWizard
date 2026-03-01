@@ -1,4 +1,5 @@
-import { createTheme } from '@mui/material/styles';
+import React from 'react';
+import { createTheme, alpha } from '@mui/material/styles';
 import { backup } from 'node:sqlite';
 
 const fontStyles = `
@@ -34,6 +35,16 @@ const fontStyles = `
   font-display: swap;
 }
 `;
+
+export type ThemeMode = 'light' | 'dark';
+
+export const ThemeModeContext = React.createContext<{
+  mode: ThemeMode;
+  toggleTheme: () => void;
+}>({
+  mode: 'light',
+  toggleTheme: () => {},
+});
 
 if (typeof window !== 'undefined') {
   const styleElement = document.createElement('style');
@@ -114,15 +125,15 @@ const theme = createTheme({
           },
           ...(ownerState.variant === 'contained' && {
             background: theme.palette.text.disabled,
-            color: 'white',
-            '&:hover': { background: '#ff7b6a63' },
+            color: theme.palette.common.white,
+            '&:hover': { background: alpha(theme.palette.text.secondary, 0.39) },
           }),
           ...(ownerState.variant === 'outlined' && {
             background: 'transparent',
             color: theme.palette.text.disabled,
             border: `1px solid ${theme.palette.text.disabled}`,
             '&:hover': {
-              background: 'rgba(128, 128, 128, 0.144)',
+              background: theme.palette.action.hover,
               transition: '0.6s ease',
               cursor: 'pointer',
               border: `1px solid ${theme.palette.text.primary}`,
@@ -143,7 +154,7 @@ const theme = createTheme({
             transition: 'background 0.4s ease, border 0.4s ease',
 
             '&:hover': {
-              background: 'rgba(75, 75, 75, 0.413)',
+              background: theme.palette.action.selected,
             },
 
             '&.Mui-focused': {
@@ -152,7 +163,7 @@ const theme = createTheme({
             },
 
             '&.Mui-disabled': {
-              background: 'rgba(255,255,255,0.05)',
+              background: theme.palette.action.disabledBackground,
               border: `1px solid ${theme.palette.text.disabled}`,
               color: theme.palette.text.disabled,
               cursor: 'not-allowed',

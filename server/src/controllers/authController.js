@@ -25,14 +25,19 @@ export const register = async (req, res) => {
 
     // Валидация role
     const validRoles = ["CUSTOMER", "OWNER"];
-    const userRole = (role && typeof role === 'string' && validRoles.includes(role.toUpperCase())) 
-      ? role.toUpperCase() 
-      : "CUSTOMER";
+    const userRole =
+      role &&
+      typeof role === "string" &&
+      validRoles.includes(role.toUpperCase())
+        ? role.toUpperCase()
+        : "CUSTOMER";
 
     // Нормализация email
     const normalizedEmail = email.trim().toLowerCase();
 
-    const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    const existing = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
     if (existing) {
       return res.status(409).json({ error: "Пользователь уже существует" });
     }
@@ -46,7 +51,8 @@ export const register = async (req, res) => {
         name: name ? name.trim() : null,
         role: userRole,
         phone: phone ? phone.trim() : null,
-        bakeryName: userRole === "OWNER" ? (bakeryName ? bakeryName.trim() : null) : null,
+        bakeryName:
+          userRole === "OWNER" ? (bakeryName ? bakeryName.trim() : null) : null,
       },
     });
 
@@ -56,7 +62,12 @@ export const register = async (req, res) => {
 
     res.status(201).json({
       token,
-      user: { id: user.id, email: user.email, role: user.role, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+      },
     });
   } catch (error) {
     console.error("Registration error:", error);
@@ -66,34 +77,22 @@ export const register = async (req, res) => {
       meta: error.meta,
       stack: error.stack,
     });
-    
+
     // Более детальная обработка ошибок
-    if (error.code === 'P2002') {
-      return res.status(409).json({ error: "Пользователь с таким email уже существует" });
+    if (error.code === "P2002") {
+      return res
+        .status(409)
+        .json({ error: "Пользователь с таким email уже существует" });
     }
-    
-    if (error.code === 'P2003') {
+
+    if (error.code === "P2003") {
       return res.status(400).json({ error: "Ошибка валидации данных" });
     }
 
-    // Обработка ошибок подключения к БД
-    if (error.message && error.message.includes('Authentication failed')) {
-      return res.status(500).json({ 
-        error: "Ошибка подключения к базе данных",
-        message: "Проверьте настройки DATABASE_URL в файле .env. Убедитесь, что указаны правильные учетные данные и база данных существует."
-      });
-    }
-
-    if (error.message && error.message.includes('Can\'t reach database server')) {
-      return res.status(500).json({ 
-        error: "Не удается подключиться к базе данных",
-        message: "Убедитесь, что PostgreSQL запущен и доступен по указанному адресу."
-      });
-    }
-
-    res.status(500).json({ 
+    res.status(500).json({
       error: "Внутренняя ошибка сервера",
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
@@ -114,8 +113,10 @@ export const login = async (req, res) => {
 
     // Нормализация email для входа
     const normalizedEmail = email.trim().toLowerCase();
-    
-    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
       return res.status(401).json({ error: "Неверный email или пароль" });
     }
@@ -126,7 +127,12 @@ export const login = async (req, res) => {
 
     res.json({
       token,
-      user: { id: user.id, email: user.email, role: user.role, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+      },
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -135,25 +141,11 @@ export const login = async (req, res) => {
       code: error.code,
       stack: error.stack,
     });
-    
-    // Обработка ошибок подключения к БД
-    if (error.message && error.message.includes('Authentication failed')) {
-      return res.status(500).json({ 
-        error: "Ошибка подключения к базе данных",
-        message: "Проверьте настройки DATABASE_URL в файле .env. Убедитесь, что указаны правильные учетные данные и база данных существует."
-      });
-    }
 
-    if (error.message && error.message.includes('Can\'t reach database server')) {
-      return res.status(500).json({ 
-        error: "Не удается подключиться к базе данных",
-        message: "Убедитесь, что PostgreSQL запущен и доступен по указанному адресу."
-      });
-    }
-    
-    res.status(500).json({ 
+    res.status(500).json({
       error: "Внутренняя ошибка сервера",
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };
