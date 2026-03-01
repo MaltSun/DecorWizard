@@ -1,18 +1,18 @@
 {
-    "step1": {
-        "title": "Step 1",
-        "description": "Complete our quick, interactive questionnaire. Select your preferred flavors, decoration style, size, and the occasion. This takes just 2-3 minutes and helps us understand your unique taste and aesthetic vision."
-    },
-    "step2": {
-        "title": "Step 2",
-        "description": "Our AI-powered system analyzes your preferences and generates several unique cake design concepts. Within seconds, you'll see visualized options that blend the latest patisserie trends with your personal requests, creating a truly personalized blueprint."
-    },
-    "step3": {
-        "title": "Step 3",
-        "description": "Review the generated concepts. If needed, regenerate with one click or manually fine-tune the details—adjust the color palette, decorative elements, or inscriptions. Iterate until the design perfectly matches your vision before locking it in."
-    },
-    "step4": {
-        "title": "Step 4",
-        "description": "Select your preferred delivery date, provide shipping details, and confirm your order. Then, all that's left is to look forward to the day your exclusive, custom-designed cake becomes the sweet centerpiece of your celebration."
-    }
+  "step1": {
+    "title": "Шаг 1",
+    "description": "Пройдите наш быстрый интерактивный опросник. Выберите предпочитаемые вкусы, стиль оформления, размер и повод. Это займёт всего 2–3 минуты и поможет нам понять ваши вкусы и эстетическое видение."
+  },
+  "step2": {
+    "title": "Шаг 2",
+    "description": "Наша система на базе ИИ анализирует ваши предпочтения и генерирует несколько уникальных концептов дизайна торта. За считанные секунды вы увидите визуализированные варианты, объединяющие актуальные тренды кондитерского искусства с вашими пожеланиями."
+  },
+  "step3": {
+    "title": "Шаг 3",
+    "description": "Просмотрите сгенерированные концепты. При необходимости перегенерируйте одним кликом или вручную отрегулируйте детали — палитру цветов, декоративные элементы или надписи. Итерируйте, пока дизайн не будет полностью соответствовать вашей идее."
+  },
+  "step4": {
+    "title": "Шаг 4",
+    "description": "Выберите желаемую дату доставки, укажите данные для доставки и подтвердите заказ. Остаётся только с нетерпением ждать дня, когда ваш эксклюзивный торт станет сладким центром праздника."
+  }
 }

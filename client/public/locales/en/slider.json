@@ -1,18 +1,18 @@
 {
   "slide1": {
-    "title": "Заголовок первого слайда",
-    "description": "Описание первого слайда"
+    "title": "First slide title",
+    "description": "First slide description"
   },
   "slide2": {
-    "title": "Заголовок второго слайда",
-    "description": "Описание второго слайда"
+    "title": "Second slide title",
+    "description": "Second slide description"
   },
   "slide3": {
-    "title": "Заголовок 4 слайда",
-    "description": "Описание второго слайда"
+    "title": "Third slide title",
+    "description": "Third slide description"
   },
   "slide4": {
-    "title": "Заголовок 4 слайда",
-    "description": "Описание второго слайда"
+    "title": "Fourth slide title",
+    "description": "Fourth slide description"
   }
 }
