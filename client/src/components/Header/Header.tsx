@@ -44,8 +44,8 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
     navigate(AppRoutes.Main);
     setDrawerOpen(false);
   };
-  const handleHistoryNavigate = () => {
-    navigate(AppRoutes.History);
+  const handleCatalogNavigate = () => {
+    navigate(AppRoutes.Catalog);
     setDrawerOpen(false);
   };
   const handleProfileNavigate = () => {
@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
 
   const navItems = [
     { key: 'main', label: t('common:main'), onClick: handleMainNavigate },
-    { key: 'catalog', label: t('common:history'), onClick: handleHistoryNavigate },
+    { key: 'catalog', label: t('common:catalog'), onClick: handleCatalogNavigate },
     { key: 'profile', label: t('common:profile'), onClick: handleProfileNavigate },
   ];
 
@@ -129,7 +129,11 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
         }}
       >
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton onClick={() => setDrawerOpen(false)} aria-label="close" sx={t => ({ color: t.palette.text.primary })}>
+          <IconButton
+            onClick={() => setDrawerOpen(false)}
+            aria-label="close"
+            sx={t => ({ color: t.palette.text.primary })}
+          >
             <CloseIcon />
           </IconButton>
         </Box>

@@ -63,7 +63,6 @@ function App() {
     <ThemeModeContext.Provider value={colorMode}>
       <ThemeProvider theme={muiTheme}>
         <I18nextProvider i18n={i18n}>
-          {/* <GlobalStyles styles={globalStyles} /> */}
           <BrowserRouter>
             <Router />
             <ToastContainer />
