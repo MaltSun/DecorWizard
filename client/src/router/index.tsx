@@ -10,6 +10,7 @@ const History = React.lazy(() => import('../pages/GenerationHistory/GenerationHi
 const ForgotPassword = React.lazy(() => import('../pages/ForgotPassword/ForgotPassword'));
 const Authorization = React.lazy(() => import('../pages/Authorization/Authorization'));
 const Registration = React.lazy(() => import('../pages/Signup/Signup'));
+const Catalog = React.lazy(() => import('../pages/Catalog/Catalog'));
 
 const Loader = () => (
   <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -28,6 +29,7 @@ const Router = () => {
         <Route path={AppRoutes.ForgotPassword} element={<ForgotPassword />} />
         <Route path={AppRoutes.Login} element={<Authorization />} />
         <Route path={AppRoutes.Registration} element={<Registration />} />
+        <Route path={AppRoutes.Catalog} element={<Catalog />} />
 
         <Route path="*" element={<Main />} />
       </Routes>
