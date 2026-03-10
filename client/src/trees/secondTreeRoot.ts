@@ -5,12 +5,12 @@ export function secondTreeRoot() {
     secondRoot.yesBranch = new QuestionNode("Этот торт для ребёнка?", ["child"]);//
     secondRoot.yesBranch.yesBranch = new QuestionNode(
         "Торт должен соответствовать конкретной тематике?",
-        ["thematicCake"]
+        ["thematic"]
     );
 
     secondRoot.yesBranch.yesBranch.yesBranch = new QuestionNode(
         "Торт должен быть вдохновлён природой (горный, лесной, морской стиль)?",
-        ["natureInspiredCake"]
+        ["natureInspired"]
     );
 
     secondRoot.yesBranch.yesBranch.yesBranch.yesBranch = new QuestionNode(
@@ -30,7 +30,7 @@ export function secondTreeRoot() {
 
     secondRoot.yesBranch.yesBranch.yesBranch.noBranch.noBranch = new QuestionNode(
         "Хотите торт, вдохновлённый вашим любимым фильмом, сериалом или мультфильмом?",
-        ["thematicCake"]
+        ["thematic"]
     );
 
     secondRoot.yesBranch.yesBranch.yesBranch.noBranch.noBranch.noBranch = new QuestionNode(
@@ -40,7 +40,7 @@ export function secondTreeRoot() {
 
     secondRoot.noBranch = new QuestionNode(
         "Этот торт для свадьбы или годовщины?",
-        ["weddingOrAnniversaryCake"]
+        ["weddingOrAnniversary"]
     );
     secondRoot.yesBranch.noBranch = new QuestionNode(
         "Торт для женщины?",
@@ -48,7 +48,7 @@ export function secondTreeRoot() {
     );
     secondRoot.yesBranch.yesBranch = new QuestionNode(
         "Торт должен соответствовать конкретной тематике?",
-        ["thematicCake"]
+        ["thematic"]
     );
 
     secondRoot.yesBranch.yesBranch.noBranch = new QuestionNode(
@@ -57,16 +57,16 @@ export function secondTreeRoot() {
     );
     secondRoot.yesBranch.yesBranch.noBranch.noBranch = new QuestionNode(
         "Торт должен быть вдохновлён природой (горный, лесной, морской стиль)?",
-        ["natureInspiredCake"]
+        ["natureInspired"]
     );
     secondRoot.yesBranch.yesBranch.noBranch.yesBranch = new QuestionNode(
         "Торт должен быть вдохновлён природой (горный, лесной, морской стиль)?",
-        ["natureInspiredCake"]
+        ["natureInspired"]
     );
 
     secondRoot.yesBranch.yesBranch.yesBranch = new QuestionNode(
         "Торт должен быть вдохновлён природой (горный, лесной, морской стиль)?",
-        ["natureInspiredCake"]
+        ["natureInspired"]
     );
 
     secondRoot.yesBranch.yesBranch.yesBranch.yesBranch = new QuestionNode(

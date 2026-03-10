@@ -3,12 +3,12 @@ import { QuestionNode } from "../models/QuestionNode";
 export function forthTreeRoot(): QuestionNode {
     const forthRoot = new QuestionNode(
         'Хотите, чтобы торт выглядел "дорого" и роскошно?',
-        ['luxuryAndExpensiveLook']
+        ['luxuryLook']
     );
 
     forthRoot.yesBranch = new QuestionNode(
         'Хотите, чтобы декор был насыщенным и детализированным?',
-        ['detailedAndRichDecor']
+        ['detailed']
     );
 
     forthRoot.yesBranch.yesBranch = new QuestionNode(
@@ -23,12 +23,12 @@ export function forthTreeRoot(): QuestionNode {
 
     forthRoot.yesBranch.noBranch.noBranch = new QuestionNode(
         'Вам ближе нежные пастельные оттенки?',
-        ['pastelColors']
+        ['pastel']
     );
 
     forthRoot.yesBranch.noBranch.noBranch.yesBranch = new QuestionNode(
         'Хотите, чтобы торт был белым?',
-        ['whiteCake']
+        ['white']
     );
 
     forthRoot.yesBranch.noBranch.noBranch.noBranch = new QuestionNode(
@@ -38,11 +38,11 @@ export function forthTreeRoot(): QuestionNode {
 
     forthRoot.yesBranch.noBranch.noBranch.noBranch.yesBranch = new QuestionNode(
         'Предпочитаете глубокие, тёмные тона?',
-        ['darkColors']
+        ['dark']
     );
 
     forthRoot.yesBranch.noBranch.noBranch.noBranch.yesBranch.yesBranch =
-        new QuestionNode('Предпочитаете чёрный торт?', ['blackCake']);
+        new QuestionNode('Предпочитаете чёрный торт?', ['black']);
 
     forthRoot.noBranch = new QuestionNode(
         'Вам по душе минималистичный стиль?',
@@ -51,17 +51,17 @@ export function forthTreeRoot(): QuestionNode {
 
     forthRoot.noBranch.yesBranch = new QuestionNode(
         'Вам ближе нежные пастельные оттенки?',
-        ['pastelColors']
+        ['pastel']
     );
 
     forthRoot.noBranch.yesBranch.yesBranch = new QuestionNode(
         'Хотите, чтобы торт был белым?',
-        ['whiteCake']
+        ['white']
     );
 
     forthRoot.noBranch.noBranch = new QuestionNode(
         'Предпочитаете однотонное оформление торта?',
-        ['singleColorDecoration']
+        ['singleColor']
     );
 
     forthRoot.noBranch.noBranch.yesBranch = new QuestionNode(
@@ -81,12 +81,12 @@ export function forthTreeRoot(): QuestionNode {
 
     forthRoot.noBranch.noBranch.noBranch.yesBranch = new QuestionNode(
         'Хотите, чтобы торт был украшен мраморным эффектом?',
-        ['marbleEffect']
+        ['marbleEff']
     );
 
     forthRoot.noBranch.noBranch.noBranch.yesBranch.noBranch = new QuestionNode(
         'Хотите, чтобы торт был с эффектом омбре (плавный переход цвета)?',
-        ['ombreEffect']
+        ['ombreEff']
     );
     ;
 

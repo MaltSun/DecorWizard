@@ -3,7 +3,7 @@ import { QuestionNode } from "../models/QuestionNode";
 export function thirdTreeRoot() {
     const thirdRoot = new QuestionNode(
         "Надпись на самом торте — важный элемент?",
-        ["inscriptionOnCakeIsImportant"]
+        ["inscriptionOnCake"]
     );
 
     thirdRoot.yesBranch = new QuestionNode(
@@ -25,7 +25,7 @@ export function thirdTreeRoot() {
 
     thirdRoot.noBranch = new QuestionNode(
         "Хотели бы разместить фотографию виновника торжества на торте?",
-        ["inscriptionOnCakeIsImportant"]
+        ["photo"]
     );
     thirdRoot.noBranch.yesBranch = new QuestionNode(
         "Торт должен быть шуточный?",
