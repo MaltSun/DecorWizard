@@ -31,120 +31,32 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
     });
   };
 
-  // const handleGenerate = async () => {
-  //   if (!prompt.trim()) return;
-
-  //   setLoading(true);
-  //   setGeneratedImage(null);
-
-  //   try {
-  //     const uniquePrompt = `${prompt} ${Date.now()}`;
-      // const imageUrl = await generateImage(uniquePrompt);
-// 
-  //     const img = await preloadImage(imageUrl);
-
-  //     setGeneratedImage(imageUrl);
-  //     setLoading(false);
-
-  //     handleSaveHistory({
-  //       imageSrc: imageUrl,
-  //       title: `Generated_${new Date().toLocaleString()}`,
-  //       prompt: prompt,
-  //     });
-  //     setGeneratedImage(imageUrl);
-  //   } catch (error) {
-  //     console.error('Error generating image:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
-
     setLoading(true);
     setGeneratedImage(null);
 
     try {
-      const uniquePrompt = `${prompt} ${Date.now()}`;
+      const imageUrl = await generateImage(prompt);
 
-      const response = await generateImage(uniquePrompt)
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // Прямо устанавливаем URL в src картинки
+      setGeneratedImage(imageUrl);
 
-      if (!response.body) {
-        throw new Error('No response body');
-      }
-
-      const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
-
-      let accumulatedImageUrl: string | null = null;
-
-      // Читаем поток в цикле
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) {
-          console.log('Stream completed');
-          break;
-        }
-
-        if (!value) continue;
-
-        // Разбиваем на строки
-        const lines = value.split('\n');
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const data = JSON.parse(line.slice(6));
-
-              switch (data.status) {
-                case 'processing':
-                  console.log('Progress:', data.message);
-                  // Можно добавить индикатор прогресса, если есть процент
-                  break;
-
-                case 'complete':
-                  console.log('Image ready:', data.imageUrl);
-                  accumulatedImageUrl = data.imageUrl;
-                  // Можно сразу выйти, если больше ничего не ждём
-                  break;
-
-                case 'error':
-                  console.error('Generation error:', data.message);
-                  throw new Error(data.message || 'Unknown error');
-              }
-            } catch (e) {
-              console.error('Failed to parse SSE data:', e, line);
-            }
-          }
-        }
-      }
-
-      if (accumulatedImageUrl) {
-        await preloadImage(accumulatedImageUrl);
-
-        setGeneratedImage(accumulatedImageUrl);
-
-        handleSaveHistory({
-          imageSrc: accumulatedImageUrl,
-          title: `Generated_${new Date().toLocaleString()}`,
-          prompt: prompt,
-        });
-      } else {
-        console.warn('No image URL received in stream');
-      }
+      handleSaveHistory({
+        imageSrc: imageUrl,
+        title: `Cake_${Date.now()}`,
+        prompt: prompt,
+      });
     } catch (error) {
-      console.error('Error generating image:', error);
-      alert('Ошибка генерации изображения');
+      console.error(error);
+      alert('Ошибка генерации');
     } finally {
       setLoading(false);
     }
   };
 
+
+  
   const handleSubmit = () => {
     console.log('Submitting image:', generatedImage);
     alert('Изображение сохранено!');
@@ -178,7 +90,10 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
           <ImageContainer>
             {loading ? (
               <Box>
-                <CircularProgress size={60} sx={theme => ({ color: theme.palette.primary.main, mb: 2 })} />
+                <CircularProgress
+                  size={60}
+                  sx={theme => ({ color: theme.palette.primary.main, mb: 2 })}
+                />
               </Box>
             ) : (
               <Box

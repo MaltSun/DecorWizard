@@ -7,7 +7,7 @@ export async function generatePromptFromResults(resultsByTree: Record<string, { 
     parts.push(`${tagList}`);
   }
 
-  const userRequest = `Создай промпт для генерации изображения красивого реалистичного торта в стиле: ${parts.join('; ')}. Торт должен быть на переднем плане, фон размытый однотонный`;
+  const userRequest = `${parts.join('; ')}`;
 
   const response = await fetch("http://localhost:5000/generate/prompt", {
     method: "POST",

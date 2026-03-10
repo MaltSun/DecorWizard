@@ -6,9 +6,7 @@ export const generateImage = async (prompt: string) => {
   });
 
   const data = await response.json();
-  return data.image; 
+  if (!response.ok) throw new Error(data.error);
+  
+  return data.imageUrl; 
 };
-
-
-
-
