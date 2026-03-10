@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SwitchButton } from './type';
+import theme from '../../../theme/theme';
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -12,9 +13,23 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <SwitchButton onClick={toggleLanguage}>
+    <button
+      style={{
+        width: '60px',
+        border: '2px solid',
+        borderRadius: '20px',
+        padding: '5px',
+        color: theme.palette.text.primary,
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        background: 'transparent',
+        fontWeight: 'bold',
+        fontSize: '20px',
+      }}
+      onClick={toggleLanguage}
+    >
       {i18n.language === 'en' ? 'EN' : 'RU'}
-    </SwitchButton>
+    </button>
   );
 };
 
