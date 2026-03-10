@@ -1,9 +1,7 @@
-// Загружаем переменные окружения в самом начале
 import "dotenv/config";
 import app from "./src/app.js";
 import { config } from "./src/config/index.js";
 
-// Проверяем наличие критических переменных окружения
 if (!process.env.JWT_SECRET) {
   console.error("⚠️  ВНИМАНИЕ: JWT_SECRET не установлен в переменных окружения!");
   console.error("   Убедитесь, что файл .env существует и содержит JWT_SECRET");
