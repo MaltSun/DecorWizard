@@ -3,33 +3,33 @@ import { QuestionNode } from "../models/QuestionNode";
 export function thirdTreeRoot() {
     const thirdRoot = new QuestionNode(
         "Надпись на самом торте — важный элемент?",
-        ["надпись_на_торте"]
+        ["inscriptionOnCakeIsImportant"]
     );
 
     thirdRoot.yesBranch = new QuestionNode(
         "Нравятся торты с тайным посланием (сжигается верхний слой)?",
-        ["тайное_послание"]
+        ["secretMessage"]
     );
     thirdRoot.yesBranch.noBranch = new QuestionNode(
         "Топпер — обязательный элемент для вашего торта?",
-        ["топпер"]
+        ["topper"]
     );
     thirdRoot.yesBranch.noBranch.yesBranch = new QuestionNode(
         "Хотите украсить торт топпером сверху?",
-        ["топпер_сверху"]
+        ["topperAbove"]
     );
     thirdRoot.yesBranch.noBranch.yesBranch.noBranch = new QuestionNode(
         "Предпочитаете топпер, закреплённый сбоку?",
-        ["топпер_сбоку"]
+        ["topperSide"]
     );
 
     thirdRoot.noBranch = new QuestionNode(
         "Хотели бы разместить фотографию виновника торжества на торте?",
-        ["фотография_на_торте"]
+        ["inscriptionOnCakeIsImportant"]
     );
     thirdRoot.noBranch.yesBranch = new QuestionNode(
         "Торт должен быть шуточный?",
-        ["шуточный_торт"]
+        ["funnyCake"]
     );
 
 
