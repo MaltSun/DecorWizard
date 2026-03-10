@@ -1,4 +1,3 @@
-// Cart.tsx
 import React from 'react';
 import {
   Drawer,
@@ -23,8 +22,7 @@ import {
   ShoppingCartCheckout as CheckoutIcon,
 } from '@mui/icons-material';
 
-import { useCart } from '../../pages/Cart/useCart';          // твой хук корзины
-import { useCatalog } from '../../pages/Cart/CartProvider'; // или откуда берёшь каталог
+import { useStore } from '../../store/store';
 
 interface CartDrawerProps {
   open: boolean;
@@ -32,25 +30,26 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ open, onClose }: CartDrawerProps) {
-  const { cart, updateQuantity, removeFromCart, clearCart, getTotalItems } = useCart();
-  const { catalog } = useCatalog();
+  const { cart, update, remove, clear, getTotalItems } = useStore();
 
-  const cartItems = Object.entries(cart)
-    .map(([id, quantity]) => {
-      const product = catalog.find(p => p.id === id);
+  const catalogRaw = localStorage.getItem('catalog');
+  const catalog: any[] = catalogRaw ? JSON.parse(catalogRaw) : [];
+
+  const cartItems = cart
+    .map(cartItem => {
+      const product = catalog.find(p => p.id === cartItem.id);
       if (!product) return null;
+
       return {
         ...product,
-        quantity,
-        subtotal: Number(product.price),
+        quantity: cartItem.quantity,
+        subtotal: Number(product.price) * cartItem.quantity,
       };
     })
-    .filter((item): item is NonNullable<typeof item> => item !== null);
+    .filter(Boolean);
 
-
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
-
-  const isEmpty = cartItems.length === 0;
+  const totalPrice = cartItems.reduce((sum, item) => sum + (item?.subtotal || 0), 0);
+  const isEmpty = cart.length === 0;
 
   return (
     <Drawer
@@ -89,7 +88,6 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           </IconButton>
         </Box>
 
-        {/* Содержимое */}
         <Box sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
           {isEmpty ? (
             <EmptyCart onClose={onClose} />
@@ -118,17 +116,14 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
                     <ListItemText
                       primary={
-                        <Typography variant="subtitle1" fontWeight={600}>
+                        <Typography variant="body1" fontWeight={600}>
                           {item.name}
                         </Typography>
                       }
                       secondary={
                         <>
-                          <Typography variant="body2" color="text.secondary">
+                          <Typography variant="h3" color="text.secondary">
                             {Number(item.price).toLocaleString('ru-RU')} ₽
-                          </Typography>
-                          <Typography variant="body2" color="text.primary" fontWeight={500} mt={0.5}>
-                            Итого: {item.subtotal.toLocaleString('ru-RU')} ₽
                           </Typography>
                         </>
                       }
@@ -138,7 +133,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <Stack direction="row" spacing={1} alignItems="center" sx={{ ml: 1 }}>
                       <IconButton
                         size="small"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => update(item.id, item.quantity - 1)}
                         disabled={item.quantity <= 1}
                       >
                         <RemoveIcon fontSize="small" />
@@ -155,17 +150,14 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                         {item.quantity}
                       </Typography>
 
-                      <IconButton
-                        size="small"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      >
+                      <IconButton size="small" onClick={() => update(item.id, item.quantity + 1)}>
                         <AddIcon fontSize="small" />
                       </IconButton>
 
                       <IconButton
                         size="small"
                         color="error"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => remove(item.id)}
                         sx={{ ml: 1 }}
                       >
                         <DeleteIcon fontSize="small" />
@@ -179,7 +171,6 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           )}
         </Box>
 
-        {/* Футер с итогом и кнопкой оформления */}
         {!isEmpty && (
           <Box
             sx={{
@@ -203,8 +194,6 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 fullWidth
                 startIcon={<CheckoutIcon />}
                 onClick={() => {
-                  alert('Переход к оформлению заказа...');
-                  // здесь будет логика оформления
                   // onClose();
                 }}
               >
@@ -215,7 +204,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 variant="outlined"
                 color="inherit"
                 size="small"
-                onClick={clearCart}
+                onClick={clear}
                 sx={{ alignSelf: 'center', mt: 1 }}
               >
                 Очистить корзину
@@ -228,7 +217,6 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   );
 }
 
-// Вспомогательный компонент для пустой корзины
 function EmptyCart({ onClose }: { onClose: () => void }) {
   return (
     <Box
@@ -245,9 +233,7 @@ function EmptyCart({ onClose }: { onClose: () => void }) {
       <Typography variant="h5" gutterBottom>
         Ваша корзина пуста
       </Typography>
-      <Typography color="text.secondary" sx={{ mb: 4, maxWidth: 320 }}>
-        Добавьте товары из каталога — здесь появится список выбранных позиций
-      </Typography>
+
       <Button variant="contained" onClick={onClose}>
         Продолжить покупки
       </Button>

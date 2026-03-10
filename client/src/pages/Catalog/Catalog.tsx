@@ -7,6 +7,7 @@ import { Box, TextField, Pagination, Stack } from '@mui/material';
 import { Container, CatalogBlock } from './style';
 import { useCart } from '../Cart/useCart';
 import CartButton from '../../components/CartButton/CartButton';
+import { useStore } from '../../store/store';
 
 const Catalog = () => {
   const [catalog, setCatalog] = useState([]);
@@ -17,8 +18,14 @@ const Catalog = () => {
   const [page, setPage] = useState(1);
   const [itemsPerPage] = useState(12);
 
-  // Хук корзины
-  const { addToCart, updateQuantity, removeFromCart, getItemQuantity } = useCart();
+  const addToCart = useStore(state => state.add);
+  const updateQuantity = useStore(state => state.update);
+  const removeFromCart = useStore(state => state.remove);
+  const getItemQuantity = useStore(state => state.getItemQuantity);
+
+  const handleAddToCart = (itemId: string) => addToCart(itemId);
+  const handleUpdateQuantity = (itemId: string, q: number) => updateQuantity(itemId, q);
+  const handleRemoveFromCart = (itemId: string) => removeFromCart(itemId);
 
   // const [t] = useTranslation(['common', 'catalog']);
 
@@ -51,13 +58,11 @@ const Catalog = () => {
     fetchCatalog();
   }, []);
 
-  // Фильтрация каталога по поиску
   const filteredCatalog = useMemo(
     () => catalog.filter(item => item.name.toLowerCase().includes(search.toLowerCase())),
     [catalog, search]
   );
 
-  // Пагинация
   const pageCount = Math.ceil(filteredCatalog.length / itemsPerPage);
 
   const paginatedCatalog = useMemo(() => {
@@ -66,26 +71,11 @@ const Catalog = () => {
     return filteredCatalog.slice(startIndex, endIndex);
   }, [filteredCatalog, page, itemsPerPage]);
 
-  // Обработчики для корзины
-  const handleAddToCart = itemId => {
-    addToCart(itemId, 1);
-  };
-
-  const handleUpdateQuantity = (itemId, quantity) => {
-    updateQuantity(itemId, quantity);
-  };
-
-  const handleRemoveFromCart = itemId => {
-    removeFromCart(itemId);
-  };
-
-  // Обработчик изменения страницы
   const handlePageChange = (event, value) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Сброс страницы при изменении поиска
   useEffect(() => {
     setPage(1);
   }, [search]);

@@ -5,7 +5,6 @@ const CART_STORAGE_KEY = 'cart';
 export const useCart = () => {
   const [cart, setCart] = useState({});
 
-  // Загрузка корзины из sessionStorage при монтировании
   useEffect(() => {
     const savedCart = localStorage.getItem(CART_STORAGE_KEY);
     if (savedCart) {
@@ -13,12 +12,12 @@ export const useCart = () => {
     }
   }, []);
 
-  // Сохранение корзины в localStorage при изменении
+
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
-  // Добавление товара в корзину
+
   const addToCart = (itemId, quantity = 1) => {
     setCart(prevCart => ({
       ...prevCart,
@@ -26,7 +25,7 @@ export const useCart = () => {
     }));
   };
 
-  // Удаление товара из корзины
+
   const removeFromCart = (itemId) => {
     setCart(prevCart => {
       const newCart = { ...prevCart };
@@ -35,7 +34,6 @@ export const useCart = () => {
     });
   };
 
-  // Изменение количества товара
   const updateQuantity = (itemId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(itemId);
@@ -47,22 +45,19 @@ export const useCart = () => {
     }
   };
 
-  // Очистка корзины
   const clearCart = () => {
     setCart({});
   };
 
-  // Получение количества конкретного товара
   const getItemQuantity = (itemId) => {
     return cart[itemId] || 0;
   };
 
-  // Получение общего количества товаров
   const getTotalItems = () => {
     return 10;
   };
 
-  // Получение массива ID товаров в корзине
+
   const getCartItems = () => {
     return Object.entries(cart).map(([id, quantity]) => ({ id, quantity }));
   };
