@@ -12,7 +12,14 @@ import {
   useMediaQuery,
   useTheme,
   Box,
+  Badge,
 } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
+import CartDrawer from '../Cart/Cart';
+import { useCart } from '../../pages/Cart/useCart';
 
 const BurgerIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
@@ -25,10 +32,10 @@ const CloseIcon = () => (
     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
   </svg>
 );
-import { HeaderProps } from './type';
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
-import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
+
+interface HeaderProps {
+  active?: string;
+}
 
 const DRAWER_BREAKPOINT = 870;
 
@@ -37,17 +44,20 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down(DRAWER_BREAKPOINT));
-
+  const [cartOpen, setCartOpen] = useState(false);
+  const { getTotalItems } = useCart();
   const navigate = useNavigate();
 
   const handleMainNavigate = () => {
     navigate(AppRoutes.Main);
     setDrawerOpen(false);
   };
+  
   const handleCatalogNavigate = () => {
     navigate(AppRoutes.Catalog);
     setDrawerOpen(false);
   };
+  
   const handleProfileNavigate = () => {
     navigate(AppRoutes.Profile);
     setDrawerOpen(false);
@@ -116,6 +126,14 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
           <ThemeSwitcher />
         </NavActions>
       )}
+
+      <IconButton color="inherit" onClick={() => setCartOpen(true)}>
+        <Badge color="error">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
+
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
       <Drawer
         anchor="left"
