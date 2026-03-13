@@ -41,7 +41,7 @@ const LoginForm = () => {
         toast.error(result.error || t('auth:loginError') || 'Неверный email или пароль', {
           position: 'top-center',
           autoClose: 5000,
-          theme: 'dark',
+          theme: 'light',
           transition: Bounce,
         });
         return;
@@ -60,7 +60,6 @@ const LoginForm = () => {
         transition: Bounce,
       });
 
-      // Перенаправляем на главную страницу после успешного входа
       navigate(AppRoutes.Main);
     } catch (error: any) {
       toast.error(error.message || t('common:error') || 'Произошла ошибка', {
@@ -74,9 +73,9 @@ const LoginForm = () => {
 
   return (
     <BoxForm>
-      <FormPaper elevation={0}>
+      <FormPaper>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormStack spacing={theme.spacing(5)}>
+          <FormStack>
             <TextField
               {...register('email')}
               label={t('email')}

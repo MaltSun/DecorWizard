@@ -6,10 +6,7 @@ export const Container = styled(Box)(({ theme }) => (
         flexDirection: 'column',
         alignItems: 'center',
         width: '100%',
-        background: theme.palette.background.default,
         minHeight: '100vh',
-        backgroundAttachment: 'fixed',
-        backgroundImage: 'url(/background/image.png)'
     }
 ))
 

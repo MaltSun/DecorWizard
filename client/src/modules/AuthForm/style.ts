@@ -10,6 +10,7 @@ export const BoxForm = styled(Box)(() => ({
 
 export const FormPaper = styled(Paper)(() => ({
   width: '100%',
+  elevation: 0,
 }));
 
 export const FormStack = styled(Stack)(({ theme }) => ({
@@ -21,6 +22,7 @@ export const FormStack = styled(Stack)(({ theme }) => ({
   width: '600px',
   gap: theme.spacing(1),
   background: 'transparent',
+  spacing: theme.spacing(5),
 }));
 
 export const FormButton = styled(Button)(() => ({
