@@ -22,7 +22,10 @@ import {
   ShoppingCartCheckout as CheckoutIcon,
 } from '@mui/icons-material';
 
-import { useStore } from '../../store/store';
+import { useStore } from '../../store/cartSlice';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { AppRoutes } from '../../router/router';
+import { useCatalogStore } from '../../store/catalogSlice';
 
 interface CartDrawerProps {
   open: boolean;
@@ -32,8 +35,9 @@ interface CartDrawerProps {
 export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   const { cart, update, remove, clear, getTotalItems } = useStore();
 
-  const catalogRaw = localStorage.getItem('catalog');
-  const catalog: any[] = catalogRaw ? JSON.parse(catalogRaw) : [];
+  const navigate = useNavigate();
+
+  const catalog = useCatalogStore.getState().catalog;
 
   const cartItems = cart
     .map(cartItem => {
@@ -50,6 +54,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item?.subtotal || 0), 0);
   const isEmpty = cart.length === 0;
+
+  const handleNavigateToOrder = () => {
+    onClose();
+    navigate(AppRoutes.Order);
+  };
 
   return (
     <Drawer
@@ -193,9 +202,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 size="large"
                 fullWidth
                 startIcon={<CheckoutIcon />}
-                onClick={() => {
-                  // onClose();
-                }}
+                onClick={handleNavigateToOrder}
               >
                 Оформить заказ
               </Button>
