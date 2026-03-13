@@ -52,12 +52,17 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
     navigate(AppRoutes.Main);
     setDrawerOpen(false);
   };
-  
+
   const handleCatalogNavigate = () => {
     navigate(AppRoutes.Catalog);
     setDrawerOpen(false);
   };
-  
+
+  const handleHistoryNavigate = () => {
+    navigate(AppRoutes.History);
+    setDrawerOpen(false);
+  };
+
   const handleProfileNavigate = () => {
     navigate(AppRoutes.Profile);
     setDrawerOpen(false);
@@ -66,6 +71,7 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
   const navItems = [
     { key: 'main', label: t('common:main'), onClick: handleMainNavigate },
     { key: 'catalog', label: t('common:catalog'), onClick: handleCatalogNavigate },
+    { key: 'history', label: t('common:history'), onClick: handleHistoryNavigate },
     { key: 'profile', label: t('common:profile'), onClick: handleProfileNavigate },
   ];
 
