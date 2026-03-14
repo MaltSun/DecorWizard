@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import Catalog from '../pages/Catalog/Catalog';
 
 export interface CatalogItem {
   id: string;
@@ -21,9 +22,11 @@ export interface ICatalog {
   fetchCatalog: () => Promise<void>;
   addItem: (item: CatalogItem) => Promise<void>;
   removeItem: (id: string) => Promise<void>;
+  getItemsId: () => string[];
+  getItemById: (id: string) => CatalogItem;
 }
 
-export const useCatalogStore = create<ICatalog>(set => ({
+export const useCatalogStore = create<ICatalog>((set, get) => ({
   catalog: [],
   loading: false,
   error: null,
@@ -60,7 +63,6 @@ export const useCatalogStore = create<ICatalog>(set => ({
       if (!response.ok) throw new Error('Не удалось добавить товар');
 
       const createdItem = await response.json();
-      // Обновляем стейт, добавляя новый элемент в массив
       set(state => ({ catalog: [...state.catalog, createdItem] }));
     } catch (err: any) {
       set({ error: err.message });
@@ -76,12 +78,17 @@ export const useCatalogStore = create<ICatalog>(set => ({
 
       if (!response.ok) throw new Error('Не удалось удалить товар');
 
-      // Убираем элемент из стейта
       set(state => ({
         catalog: state.catalog.filter(item => item.id !== id),
       }));
     } catch (err: any) {
       set({ error: err.message });
     }
+  },
+  getItemsId: () => {
+    return get().catalog.map(item => item.id);
+  },
+  getItemById: (id: string) => {
+    return get().catalog.find(item => item.id === id);
   },
 }));

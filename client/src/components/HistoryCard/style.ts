@@ -22,3 +22,9 @@ export const InfoContainer = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2),
     overflow: 'hidden',
 }));
+
+export const Image = styled('img')(({ theme }) => ({
+    height: '187px',
+    borderRadius: '20px',
+    objectFit: 'contain',
+}));
