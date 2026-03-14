@@ -4,6 +4,7 @@ import { Button, CircularProgress, Box } from '@mui/material';
 import { GenerateContainer, GenerateContent, ImageContainer, ButtonsContainer } from './style';
 import { HistoryCardProps } from '../../components/HistoryCard/type';
 import { response } from 'express';
+import { Bounce, toast } from 'react-toastify';
 
 const ImageGenerator = ({ initialPrompt = '' }) => {
   const [prompt, setPrompt] = useState(initialPrompt);
@@ -39,7 +40,6 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
     try {
       const imageUrl = await generateImage(prompt);
 
-      // Прямо устанавливаем URL в src картинки
       setGeneratedImage(imageUrl);
 
       handleSaveHistory({
@@ -49,17 +49,25 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
       });
     } catch (error) {
       console.error(error);
-      alert('Ошибка генерации');
+
+      toast.error(error.message || 'Ошибка генерации', {
+        position: 'top-center',
+        autoClose: 5000,
+        theme: 'dark',
+        transition: Bounce,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-
-  
   const handleSubmit = () => {
-    console.log('Submitting image:', generatedImage);
-    alert('Изображение сохранено!');
+    toast.success('Изображение сохранено!', {
+      position: 'top-center',
+      autoClose: 5000,
+      theme: 'dark',
+      transition: Bounce,
+    });
   };
 
   return (

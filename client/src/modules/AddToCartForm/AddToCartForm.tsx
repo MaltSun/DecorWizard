@@ -147,14 +147,14 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
               required
             />
 
-            <Button
+            <FormButton
               variant="contained"
               fullWidth
               type="submit"
               disabled={generalLoading || !catalog.length}
             >
               {generalLoading ? <CircularProgress size={24} /> : t('addToCart')}
-            </Button>
+            </FormButton>
 
             <FormButton
               variant="outlined"

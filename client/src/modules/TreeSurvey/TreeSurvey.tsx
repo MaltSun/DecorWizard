@@ -46,10 +46,10 @@ const TreeSurvey: React.FC<TreeSurveyProps> = ({ treeName, root, onComplete }) =
 
   return (
     <>
-      <Typography variant="body1">{current.question}</Typography>
+      <Typography variant="h2">{current.question.toUpperCase()}</Typography>
       <ButtonContainer>
         {[AnswerOption.YES, AnswerOption.MAYBE, AnswerOption.IDK, AnswerOption.NO].map(a => (
-          <Button key={a} onClick={() => handleAnswer(a)}>
+          <Button variant="contained" key={a} onClick={() => handleAnswer(a)}>
             {a.toUpperCase()}
           </Button>
         ))}
