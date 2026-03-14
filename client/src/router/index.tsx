@@ -11,6 +11,7 @@ const ForgotPassword = React.lazy(() => import('../pages/ForgotPassword/ForgotPa
 const Authorization = React.lazy(() => import('../pages/Authorization/Authorization'));
 const Registration = React.lazy(() => import('../pages/Signup/Signup'));
 const Catalog = React.lazy(() => import('../pages/Catalog/Catalog'));
+const Order = React.lazy(() => import('../pages/Cart/Order'));
 
 const Loader = () => (
   <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -30,6 +31,7 @@ const Router = () => {
         <Route path={AppRoutes.Login} element={<Authorization />} />
         <Route path={AppRoutes.Registration} element={<Registration />} />
         <Route path={AppRoutes.Catalog} element={<Catalog />} />
+        <Route path={AppRoutes.Order} element={<Order />} />
 
         <Route path="*" element={<Main />} />
       </Routes>

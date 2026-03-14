@@ -7,7 +7,8 @@ export const AppRoutes = {
   Result: "/result",
   History: "/history",
   Profile: "/profile",
-  Catalog: "/catalog"
+  Catalog: "/catalog",
+  Order: "/order"
 } as const;
 
 export type AppRoute = keyof typeof AppRoutes;
