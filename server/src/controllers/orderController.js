@@ -1,10 +1,10 @@
-import { config } from '../config/index.js';
+import { prisma } from '../config/prisma.js';
 
 export const createOrder = async (req, res) => {
   const { design, status = 'new', catalogIds } = req.body; // catalogIds — массив ID из каталога
   const userId = req.user.id;
 
-  const order = await config.order.create({
+  const order = await prisma.order.create({
     data: {
       userId,
       design,
@@ -12,9 +12,8 @@ export const createOrder = async (req, res) => {
     },
   });
 
-  // Добавляем позиции из каталога, если есть
   if (catalogIds?.length) {
-    await config.orderCatalog.createMany({
+    await prisma.orderCatalog.createMany({
       data: catalogIds.map(catalogId => ({
         orderId: order.id,
         catalogId,
@@ -26,7 +25,7 @@ export const createOrder = async (req, res) => {
 };
 
 export const getUserOrders = async (req, res) => {
-  const orders = await config.order.findMany({
+  const orders = await prisma.order.findMany({
     where: { userId: req.user.id },
     include: { orderCatalog: { include: { catalog: true } } },
   });
@@ -39,7 +38,7 @@ export const updateOrderStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
-  const updated = await config.order.update({
+  const updated = await prisma.order.update({
     where: { id },
     data: { status },
   });
@@ -50,7 +49,7 @@ export const updateOrderStatus = async (req, res) => {
 export const cancelOrder = async (req, res) => {
   const { id } = req.params;
 
-  await config.order.update({
+  await prisma.order.update({
     where: { id },
     data: { status: 'cancelled' },
   });

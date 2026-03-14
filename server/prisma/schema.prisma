@@ -60,17 +60,18 @@ model Generation {
 }
 
 model Order {
-  id        String   @id @default(uuid())
-  userId    String
-  design    String?  // описание дизайна или ссылка
-  status    String   // "new", "in_progress", "completed", "cancelled" и т.д.
-  date      DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String         @id @default(uuid())
+  userId       String
+  design       String?
+  status       String         // "new", "in_progress", "completed", "cancelled"
+  weight       Float          @default(0) // Добавленное поле
+  date         DateTime       @default(now())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orderCatalog  OrderCatalog[]
-  reviews       Review[]
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderCatalog OrderCatalog[]
+  reviews      Review[]
 
   @@index([userId])
   @@map("orders")
@@ -79,6 +80,7 @@ model Order {
 model OrderCatalog {
   orderId   String
   catalogId String
+  quantity Int
 
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   catalog Catalog @relation(fields: [catalogId], references: [id], onDelete: Cascade)
