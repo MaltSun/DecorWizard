@@ -47,7 +47,6 @@ const LoginForm = () => {
         return;
       }
 
-      // Сохраняем токен и данные пользователя
       saveAuthData({
         token: result.token,
         user: result.user,

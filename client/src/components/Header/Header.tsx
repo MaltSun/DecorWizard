@@ -64,7 +64,11 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
   };
 
   const handleProfileNavigate = () => {
-    navigate(AppRoutes.Profile);
+    if(sessionStorage.getItem('user')){
+      navigate(AppRoutes.Profile.Path);
+    } else {
+      navigate(AppRoutes.Login);
+    }
     setDrawerOpen(false);
   };
 

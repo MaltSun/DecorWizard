@@ -142,7 +142,7 @@ export const OrderForm = () => {
       if (!token) {
         toast.error('Необходима авторизация. Пожалуйста, войдите в аккаунт.');
         setLoading(false);
-        navigate('/login'); // или куда у вас страница входа
+        navigate('/login'); 
         return;
       }
 
@@ -160,7 +160,7 @@ export const OrderForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // ← вот это главное
+          Authorization: `Bearer ${token}`, 
         },
         body: JSON.stringify(payload),
       });
