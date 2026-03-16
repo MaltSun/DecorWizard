@@ -5,12 +5,23 @@ import { GenerateContainer, GenerateContent, ImageContainer, ButtonsContainer } 
 import { HistoryCardProps } from '../../components/HistoryCard/type';
 import { response } from 'express';
 import { Bounce, toast } from 'react-toastify';
+import { useNavigate, useNavigation } from 'react-router-dom';
+import { AppRoutes } from '../../router/router';
+
+type Status =
+  | { type: 'idle' }
+  | { type: 'generating'; message: string }
+  | { type: 'done'; url: string }
+  | { type: 'error'; message: string };
 
 const ImageGenerator = ({ initialPrompt = '' }) => {
   const [prompt, setPrompt] = useState(initialPrompt);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const model = 'flux';
+  const [status, setStatus] = useState<Status>({ type: 'idle' });
+  const [abortCtrl, setAbortCtrl] = useState<AbortController | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     setPrompt(initialPrompt);
   }, [initialPrompt]);
@@ -23,45 +34,62 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
     );
   };
 
-  const preloadImage = (url: string): Promise<HTMLImageElement> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = url;
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-    });
-  };
-
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     setLoading(true);
     setGeneratedImage(null);
 
-    try {
-      const imageUrl = await generateImage(prompt);
+    const controller = new AbortController();
+    setAbortCtrl(controller);
 
-      setGeneratedImage(imageUrl);
+    setStatus({ type: 'generating', message: 'Искусственный интеллект рисует...' });
+
+    try {
+      const res = await fetch('http://localhost:5000/api/generate/image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, model }),
+        signal: controller.signal,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+
+      setStatus({ type: 'done', url: data.imageUrl });
+      setGeneratedImage(data.imageUrl);
 
       handleSaveHistory({
-        imageSrc: imageUrl,
+        imageSrc: data.imageUrl,
         title: `Cake_${Date.now()}`,
         prompt: prompt,
       });
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
 
-      toast.error(error.message || 'Ошибка генерации', {
-        position: 'top-center',
-        autoClose: 5000,
-        theme: 'dark',
-        transition: Bounce,
-      });
+      if (err.name === 'AbortError') {
+        setStatus({ type: 'idle' });
+      } else {
+        setStatus({ type: 'error', message: err.message });
+
+        toast.error(err.message || 'Ошибка генерации', {
+          position: 'top-center',
+          autoClose: 5000,
+          theme: 'dark',
+          transition: Bounce,
+        });
+      }
     } finally {
+      setAbortCtrl(null);
       setLoading(false);
     }
   };
 
+  useEffect(() => () => abortCtrl?.abort(), [abortCtrl]);
+
   const handleSubmit = () => {
+    navigate(AppRoutes.History);
+
     toast.success('Изображение сохранено!', {
       position: 'top-center',
       autoClose: 5000,
