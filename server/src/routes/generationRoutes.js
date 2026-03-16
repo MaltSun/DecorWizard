@@ -3,7 +3,7 @@ import { generateImage, generatePrompt } from '../controllers/generationControll
 
 const router = Router();
 
-router.post('/', generateImage);
+router.post('/image', generateImage);
 router.post('/prompt', generatePrompt);
 
 export default router;

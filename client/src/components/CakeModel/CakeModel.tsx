@@ -13,8 +13,10 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { useTheme } from "@mui/material/styles";
 
 const CakeModel = () => {
+  const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -130,7 +132,7 @@ const CakeModel = () => {
           width: "100%",
           height: "100%",
           display: "block",
-          border: "1px solid red", // Для видимости канваса
+          border: `1px solid ${theme.palette.divider}`,
         }}
       />
 
@@ -141,8 +143,11 @@ const CakeModel = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            color: "white",
-            background: "rgba(0,0,0,0.7)",
+            color: theme.palette.common.white,
+            background:
+              theme.palette.mode === "dark"
+                ? theme.palette.grey[800]
+                : theme.palette.grey[900],
             padding: "10px",
             borderRadius: "5px",
           }}
