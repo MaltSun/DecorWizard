@@ -1,0 +1,17 @@
+{
+  "name": "my-admin-panel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "directus": "^11.17.1",
+    "pg": "^8.20.0"
+  }
+}
