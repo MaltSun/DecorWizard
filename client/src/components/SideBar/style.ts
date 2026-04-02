@@ -6,8 +6,7 @@ import GTranslateIcon from '@mui/icons-material/GTranslate';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 export const StyledList = styled(List)(({ theme }) => ({
-  // paddingTop: theme.spacing(10),
-  display: 'flex',
+   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   height: '100vh',
@@ -48,7 +47,7 @@ export const BackIcon = styled(ArrowBackIosNewIcon)(({ theme }) => ({
 export const StyledGroupIcon = styled(GroupIcon, {
   shouldForwardProp: prop => prop !== 'isActive',
 })<{ isActive?: boolean }>(({ theme, isActive }) => ({
-  color: isActive ? 'theme.palette.text.secondary' : theme.palette.text.disabled,
+  color: isActive ? 'red' : theme.palette.text.disabled,
 }));
 
 export const StyledMovingIcon = styled(MovingIcon, {

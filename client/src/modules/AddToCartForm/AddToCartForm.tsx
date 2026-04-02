@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BoxForm, FormPaper, FormStack, FormButton, FormBox } from './style';
+import { FormPaper, FormStack, FormButton, FormBox, FormImage } from './style';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button, CircularProgress, List, MenuItem, TextField } from '@mui/material';
@@ -98,12 +98,12 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
   return (
     <FormBox>
       <FormPaper elevation={0}>
-        <form onSubmit={handleFormSubmit}>
+        <form style={{ opacity: 1 }} onSubmit={handleFormSubmit}>
           <FormStack>
-            <img src={img} alt="Product" />
+            <FormImage src={img} alt="Product" />
 
             {!catalog || catalog.length === 0 ? (
-              <div>Loading catalog...</div>
+              <CircularProgress />
             ) : (
               <TextField
                 {...register('flaworId')}

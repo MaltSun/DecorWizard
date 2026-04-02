@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
   };
 
   const handleProfileNavigate = () => {
-    if(sessionStorage.getItem('user')){
+    if (sessionStorage.getItem('user')) {
       navigate(AppRoutes.Profile.Path);
     } else {
       navigate(AppRoutes.Login);
@@ -113,6 +113,7 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
             color: theme.palette.primary.main,
             cursor: 'pointer',
             fontWeight: 'bold',
+            fontFamily: 'Katibeh',
           })}
           onClick={handleMainNavigate}
         >

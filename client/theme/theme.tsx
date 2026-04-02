@@ -94,6 +94,15 @@ const theme = createTheme({
       textTransform: 'capitalize',
       fontWeight: 100,
       color: '#FD8F53',
+      fontFamily: 'Roboto',
+    },
+    body2: {
+      fontSize: '1.25rem',
+      lineHeight: 1.5,
+      textTransform: 'lowercase',
+      fontWeight: 100,
+      color: '#FD8F53',
+      fontFamily: 'Roboto',
     },
     button: {
       textTransform: 'uppercase',
@@ -203,12 +212,6 @@ const theme = createTheme({
           backgroundColor: theme.palette.background.default,
           opacity: 1,
           '&.authForm': {
-            // display: 'flex',
-            // flexDirection: 'column',
-            // padding: '20px',
-            // width: '600px',
-            // gap: '20px',
-            // background: 'transparent',
             '& > div': {
               display: 'flex',
               flexDirection: 'column',
@@ -255,10 +258,8 @@ const theme = createTheme({
     MuiListItemButton: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.text.disabled,
           width: '220px',
           border: 'none',
-          background: 'transparent',
           fontSize: '18px',
           padding: '15px 10px 15px 20px',
           borderTopRightRadius: 35,
@@ -269,21 +270,15 @@ const theme = createTheme({
             transition: '0.4s ease',
             cursor: 'pointer',
           },
-          '&:active': {
-            background: 'rgba(91, 91, 91, 0.144)',
-            transition: '0.4s ease',
-          },
-          '&.active': {
-            color: theme.palette.text.primary,
-            background: theme.palette.primary.main,
-            '&:hover': {
-              background: 'rgba(107, 36, 36, 0.31)',
-              transition: '0.4s ease',
-              cursor: 'pointer',
-            },
-            '&:active': {
-              background: 'rgba(163, 161, 161, 0.14)',
-              transition: '0.4s ease',
+          '&.Mui-selected': {
+            '&.active': {
+              color: '#ffffff',
+              background: theme.palette.primary.dark,
+              '&:hover': {
+                background: '#fd8e53be',
+                transition: '0.4s ease',
+                cursor: 'pointer',
+              }
             },
           },
         }),
@@ -299,6 +294,18 @@ const theme = createTheme({
         }),
       },
     },
+    // MuiListItemButton: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       color: theme.palette.text.disabled,
+    //       background: 'transparent',
+    //       '&.active': {
+    //         color: theme.palette.text.primary,
+    //         background: theme.palette.primary.main,
+    //       },
+    //     }),
+    //   },
+    // },
   },
 });
 

@@ -50,10 +50,10 @@ const DecorQuestions: React.FC<Props> = ({ reasonabilityIndex, collectedTags }) 
   const current = decorElements[currentIndex];
   return (
     <ContentContainer>
-      <Typography variant="body1">{current.question}</Typography>
+      <Typography variant="h2">{current.question}</Typography>
       <ButtonContainer>
         {[AnswerOption.YES, AnswerOption.MAYBE, AnswerOption.IDK, AnswerOption.NO].map(ans => (
-          <Button key={ans} onClick={() => handleAnswer(current.tag, ans)}>
+          <Button variant='contained' key={ans} onClick={() => handleAnswer(current.tag, ans)}>
             {ans.toUpperCase()}
           </Button>
         ))}

@@ -27,11 +27,11 @@ const AdminUpdateProfile: React.FC<UpdateUserProfileProps> = ({
   return (
     <FormContainer>
       <form style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }} onSubmit={onSubmit}>
-        <TextField label={t('name')} defaultValue={name || ''} disabled />
+        <TextField type='text' label={t('name')} defaultValue={name || ''}  />
 
         <FormFieldsStack>
-          <TextField label={t('email')} fullWidth disabled defaultValue={email || ''} />
-          <TextField label={t('phone')} fullWidth disabled defaultValue={phone || ''} />
+          <TextField type='email' label={t('email')} fullWidth  defaultValue={email || ''} />
+          <TextField type='tel' label={t('phone')} fullWidth  defaultValue={phone || ''} />
         </FormFieldsStack>
 
         <SubmitButton variant="outlined">{t('update')}</SubmitButton>

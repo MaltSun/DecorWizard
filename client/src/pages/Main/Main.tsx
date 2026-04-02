@@ -19,7 +19,6 @@ import theme from '../../../theme/theme';
 import Slider from '../../components/Slider/Slider';
 import { useSlidesData } from './slider.data';
 import StepCard from '../../components/StepCard/StepCard';
-import ImageTest from '../../components/ImageTest';
 
 const Main = () => {
   const [t] = useTranslation(['common', 'aboutUs', 'steps']);
@@ -51,8 +50,6 @@ const Main = () => {
         >
           {t('welcome_message')}
         </Typography>
-
-        <ImageTest />
 
         <Typography variant="h2">{t('start_building')}</Typography>
         <ButtonContainer>

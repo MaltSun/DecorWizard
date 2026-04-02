@@ -1,4 +1,4 @@
-import { ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import {  ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
@@ -8,14 +8,12 @@ import {
   Container,
   UserStack,
   UserAvatar,
-  BackIcon,
-  StyledGroupIcon,
   StyledMovingIcon,
   StyledGTranslateIcon,
   StyledPortraitIcon,
   StyledListItemText,
 } from './style';
-import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+
 const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
   const navigate = useNavigate();
   const { t } = useTranslation('common');
@@ -40,7 +38,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
       <Container>
         <ListItemButton
           onClick={handleUsersNavigate}
-          className={active === 'profile' ? 'active' : ''}
+          selected={active === 'profile'}
         >
           <ListItemIcon>
             {userData.avatar ? (
@@ -52,7 +50,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           <StyledListItemText primary={`${userData.name}`} />
         </ListItemButton>
         <ListItemButton
-          className={active === 'order' ? 'active' : ''}
+         selected={active === 'order'}
           onClick={handleOrderNavigate}
         >
           <ListItemIcon>
@@ -61,7 +59,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           <StyledListItemText primary={t('orders')} />
         </ListItemButton>
         <ListItemButton
-          className={active === 'review' ? 'active' : ''}
+          selected={active === 'review'}
           onClick={handleReviewNavigate}
         >
           <ListItemIcon>
@@ -70,7 +68,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           <StyledListItemText primary={t('reviews')} />
         </ListItemButton>
         <ListItemButton
-          className={active === 'answer' ? 'active' : ''}
+          selected={active === 'answer'}
           onClick={handleAnswerNavigate}
         >
           <ListItemIcon>
