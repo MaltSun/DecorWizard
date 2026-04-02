@@ -7,7 +7,7 @@ const router = Router();
 router.use(authenticate);
 
 router.post('/', createOrder);
-router.get('/', getUserOrders);
+router.get('/user', getUserOrders);
 
 // Только владелец может менять статус и отменять
 router.patch('/:id/status', requireRole('OWNER'), updateOrderStatus);

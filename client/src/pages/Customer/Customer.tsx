@@ -61,6 +61,10 @@ export const Customer = () => {
     fetchProfile();
   }, []);
 
+  const handleUpdateProfile = () => {
+    fetchProfile();
+  };
+
   const { t } = useTranslation(['common']);
 
   if (loading) return <CircularProgress />;

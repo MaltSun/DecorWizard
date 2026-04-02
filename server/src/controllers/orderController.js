@@ -1,7 +1,7 @@
-import { prisma } from '../config/prisma.js';
+import { prisma } from "../config/prisma.js";
 
 export const createOrder = async (req, res) => {
-  const { design, status = 'new', catalogIds } = req.body; // catalogIds — массив ID из каталога
+  const { design, status = "new", catalogIds } = req.body; // catalogIds — массив ID из каталога
   const userId = req.user.id;
 
   const order = await prisma.order.create({
@@ -14,7 +14,7 @@ export const createOrder = async (req, res) => {
 
   if (catalogIds?.length) {
     await prisma.orderCatalog.createMany({
-      data: catalogIds.map(catalogId => ({
+      data: catalogIds.map((catalogId) => ({
         orderId: order.id,
         catalogId,
       })),
@@ -24,16 +24,46 @@ export const createOrder = async (req, res) => {
   res.status(201).json(order);
 };
 
+// export const getUserOrders = async (req, res) => {
+//   const orders = await prisma.order.findMany({
+//     where: { userId: req.user.id },
+//     include: { orderCatalog: { include: { catalog: true } } },
+//   });
+//   res.json(orders);
+// };
+
 export const getUserOrders = async (req, res) => {
-  const orders = await prisma.order.findMany({
-    where: { userId: req.user.id },
-    include: { orderCatalog: { include: { catalog: true } } },
-  });
-  res.json(orders);
+  try {
+    const orders = await prisma.order.findMany({
+      where: { userId: req.user.id },
+      include: {
+        orderCatalog: {
+          include: { catalog: true },
+        },
+      },
+    });
+
+    // Трансформируем данные в плоский список товаров из всех заказов
+    const flatOrders = orders.flatMap((order) =>
+      order.orderCatalog.map((item) => ({
+        id: item.id,
+        name: item.catalog.name,
+        price: item.catalog.price,
+        img: item.catalog.img,
+        quantity: item.quantity,
+        orderDate: order.createdAt, // полезно добавить дату заказа
+      })),
+    );
+
+    res.json(flatOrders);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
 };
 
 export const updateOrderStatus = async (req, res) => {
-  if (req.user.role !== 'OWNER') return res.status(403).json({ error: 'Только владелец' });
+  if (req.user.role !== "OWNER")
+    return res.status(403).json({ error: "Только владелец" });
 
   const { id } = req.params;
   const { status } = req.body;
@@ -51,8 +81,8 @@ export const cancelOrder = async (req, res) => {
 
   await prisma.order.update({
     where: { id },
-    data: { status: 'cancelled' },
+    data: { status: "cancelled" },
   });
 
-  res.status(200).json({ message: 'Заказ отменён' });
+  res.status(200).json({ message: "Заказ отменён" });
 };
