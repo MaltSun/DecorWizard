@@ -10,13 +10,20 @@ import CartButton from '../../components/CartButton/CartButton';
 import { useStore } from '../../store/cartSlice';
 import { useCatalogStore } from '../../store/catalogSlice';
 import { toast } from 'react-toastify';
+import CatalogPopup from '../../components/CatalogPopup/CatalogPopup';
+import { set } from 'zod';
 
 const Catalog = () => {
+  const { t } = useTranslation();
+
   const { catalog, loading, error, fetchCatalog } = useCatalogStore();
 
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [itemsPerPage] = useState(12);
+
+  const [isOpen, setOpen] = useState(false);
+  const [item, setItem] = useState();
 
   const cartItems = useStore(state => state.cart);
 
@@ -55,6 +62,17 @@ const Catalog = () => {
     setPage(1);
   }, [search]);
 
+  const handleItemClick = (item: any) => {
+    setItem(item);
+    setOpen(true);
+  };
+
+  const handleClearItem = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setItem(undefined);
+    setOpen(false);
+  };
+
   if (loading) return <CircularProgress />;
   if (error)
     return toast.error(error, { theme: 'colored', position: 'top-center', autoClose: 5000 });
@@ -62,6 +80,22 @@ const Catalog = () => {
   return (
     <Container>
       <Header active="catalog" />
+
+      {isOpen && (
+        <CatalogPopup
+          onClose={handleClearItem}
+          id={item?.id || ''}
+          name={item?.name || ''}
+          price={item?.price || 0}
+          description={item?.description || ''}
+          image={item?.image || ''}
+          kkal={item?.kcal || 0}
+          carbs={item?.carbs || 0}
+          proteins={item?.proteins || 0}
+          fats={item?.fats}
+          composition={item?.composition || ''}
+        />
+      )}
 
       <TextField
         type="text"
@@ -80,8 +114,15 @@ const Catalog = () => {
               flexDirection: 'column',
               gap: '20px',
             }}
+            onDoubleClick={() => handleItemClick(item)}
           >
-            <CatalogItem name={item.name} price={item.price} image={item.image} id={item.id} />
+            <CatalogItem
+              name={item.name}
+              price={item.price}
+              image={item.image}
+              id={item.id}
+              
+            />
 
             <CartButton
               itemId={item.id}
@@ -110,7 +151,7 @@ const Catalog = () => {
 
       {filteredCatalog.length === 0 && (
         <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <p>Товары не найдены</p>
+          <p>{t('catalog.noResults')}</p>
         </Box>
       )}
     </Container>
