@@ -1,6 +1,27 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('CUSTOMER', 'OWNER');
+
+-- CreateEnum
+CREATE TYPE "OrderStatus" AS ENUM ('new', 'in_progress', 'completed', 'cancelled');
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "email" TEXT NOT NULL,
+    "passwordHash" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'CUSTOMER',
+    "name" TEXT,
+    "phone" TEXT,
+    "bakeryName" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "catalog" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "description" TEXT,
     "image" TEXT,
@@ -16,10 +37,10 @@ CREATE TABLE "catalog" (
 
 -- CreateTable
 CREATE TABLE "generations" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "prompt" TEXT NOT NULL,
     "image" TEXT,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "generations_pkey" PRIMARY KEY ("id")
@@ -27,10 +48,11 @@ CREATE TABLE "generations" (
 
 -- CreateTable
 CREATE TABLE "orders" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "userId" UUID NOT NULL,
     "design" TEXT,
-    "status" TEXT NOT NULL,
+    "status" "OrderStatus" NOT NULL DEFAULT 'new',
+    "weight" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -40,16 +62,18 @@ CREATE TABLE "orders" (
 
 -- CreateTable
 CREATE TABLE "order_catalog" (
-    "orderId" TEXT NOT NULL,
-    "catalogId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "orderId" UUID NOT NULL,
+    "catalogId" UUID NOT NULL,
+    "quantity" INTEGER NOT NULL,
 
-    CONSTRAINT "order_catalog_pkey" PRIMARY KEY ("orderId","catalogId")
+    CONSTRAINT "order_catalog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "reviews" (
-    "id" TEXT NOT NULL,
-    "orderId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "orderId" UUID NOT NULL,
     "mark" INTEGER NOT NULL,
     "text" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -59,13 +83,16 @@ CREATE TABLE "reviews" (
 
 -- CreateTable
 CREATE TABLE "answers" (
-    "id" TEXT NOT NULL,
-    "reviewId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "reviewId" UUID NOT NULL,
     "text" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "answers_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE INDEX "generations_userId_idx" ON "generations"("userId");

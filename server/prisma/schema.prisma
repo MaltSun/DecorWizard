@@ -12,8 +12,16 @@ enum Role {
   OWNER
 }
 
+enum OrderStatus {
+  NEW          @map("new")
+  IN_PROGRESS  @map("in_progress")
+  COMPLETED    @map("completed")
+  CANCELLED    @map("cancelled")
+}
+
+
 model User {
-  id         String   @id @default(uuid())
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email      String   @unique
   passwordHash String
   role       Role     @default(CUSTOMER)
@@ -30,10 +38,10 @@ model User {
 }
 
 model Catalog {
-  id          String  @id @default(uuid())
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
   description String?
-  image       String? // URL изображения торта
+  image       String? 
   price       Decimal @db.Decimal(10, 2)
   composition String?
   kcal        Int?
@@ -47,10 +55,10 @@ model Catalog {
 }
 
 model Generation {
-  id        String   @id @default(uuid())
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   prompt    String
-  image     String?  // URL сгенерированного изображения
-  userId    String
+  image     String?  
+  userId    String   @db.Uuid
   createdAt DateTime @default(now())
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -60,10 +68,10 @@ model Generation {
 }
 
 model Order {
-  id           String         @id @default(uuid())
-  userId       String
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String   @db.Uuid
   design       String?
-  status       String         // "new", "in_progress", "completed", "cancelled"
+  status       OrderStatus @default(NEW)
   weight       Float          @default(0) // Добавленное поле
   date         DateTime       @default(now())
   createdAt    DateTime       @default(now())
@@ -78,20 +86,21 @@ model Order {
 }
 
 model OrderCatalog {
-  orderId   String
-  catalogId String
-  quantity Int
-
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  orderId   String   @db.Uuid
+  catalogId String   @db.Uuid
+  quantity  Int
+  
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   catalog Catalog @relation(fields: [catalogId], references: [id], onDelete: Cascade)
 
-  @@id([orderId, catalogId])
   @@map("order_catalog")
 }
 
 model Review {
-  id        String   @id @default(uuid())
-  orderId   String
+ id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId   String   @db.Uuid
   mark      Int      // 1–5
   text      String?
   createdAt DateTime @default(now())
@@ -104,8 +113,8 @@ model Review {
 }
 
 model Answer {
-  id        String   @id @default(uuid())
-  reviewId  String
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reviewId  String @db.Uuid
   text      String
   createdAt DateTime @default(now())
 
