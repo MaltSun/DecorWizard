@@ -6,7 +6,12 @@ export const AppRoutes = {
   Questions: '/questions',
   Result: '/result',
   History: '/history',
-  Order: '/order',
+  Order: {
+    Path: '/order',
+    Children: {
+      Checkout: '/order/checkout',
+    },
+  },
   Catalog: '/catalog',
   Profile: {
     Path: '/profile',

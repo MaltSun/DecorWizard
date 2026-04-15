@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import catalogRoutes from "./routes/catalogRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/catalog", catalogRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Маршрут не найден" });
