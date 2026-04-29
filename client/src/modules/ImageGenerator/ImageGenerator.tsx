@@ -7,6 +7,7 @@ import { response } from 'express';
 import { Bounce, toast } from 'react-toastify';
 import { useNavigate, useNavigation } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
+import { useTranslation } from 'react-i18next';
 
 type Status =
   | { type: 'idle' }
@@ -15,6 +16,7 @@ type Status =
   | { type: 'error'; message: string };
 
 const ImageGenerator = ({ initialPrompt = '' }) => {
+  const { t } = useTranslation('common');
   const [prompt, setPrompt] = useState(initialPrompt);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,12 +28,19 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
     setPrompt(initialPrompt);
   }, [initialPrompt]);
 
+  const MAX_HISTORY_ITEMS = 10;
+
   const handleSaveHistory = (newEntry: HistoryCardProps) => {
-    const history = sessionStorage.getItem('history');
-    sessionStorage.setItem(
-      'history',
-      JSON.stringify([...(history ? JSON.parse(history) : []), newEntry])
-    );
+    try {
+      const raw = sessionStorage.getItem('history');
+      const oldHistory = raw ? JSON.parse(raw) : [];
+
+      const newHistory = [newEntry, ...oldHistory].slice(0, MAX_HISTORY_ITEMS);
+
+      sessionStorage.setItem('history', JSON.stringify(newHistory));
+    } catch (error) {
+      console.error('Не удалось сохранить в sessionStorage:', error);
+    }
   };
 
   const handleGenerate = async () => {
@@ -167,7 +176,7 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
                 },
               })}
             >
-              Redo
+              {t('redo')}
             </Button>
 
             <Button
@@ -185,7 +194,7 @@ const ImageGenerator = ({ initialPrompt = '' }) => {
                 },
               })}
             >
-              Submit
+              {t('submit')}
             </Button>
           </ButtonsContainer>
         </GenerateContent>
