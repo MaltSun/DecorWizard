@@ -1,11 +1,11 @@
 import { Box, Button, Paper, Stack, styled } from '@mui/material';
 
-export const BoxForm = styled(Box)(() => ({
+export const BoxForm = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   padding: 2,
-  
+
 }));
 
 export const FormPaper = styled(Paper)(() => ({
@@ -18,14 +18,9 @@ export const FormStack = styled(Stack)(({ theme }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(10),
-  width: '600px',
-  gap: theme.spacing(1),
+  padding: theme.spacing(5),
+  minWidth: '600px',
+  gap: theme.spacing(3),
   background: 'transparent',
-  spacing: theme.spacing(5),
 }));
 
-export const FormButton = styled(Button)(() => ({
-  height: 45,
-  width: 210,
-}));

@@ -1,51 +1,37 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ReviewSection, OwnerAnswer } from './style'; // Ваши новые стили
+import { Box, CircularProgress, Rating, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Container, MainPart } from '../Customer/style';
 import Header from '../../components/Header/Header';
 import SideBar from '../../components/SideBar/SideBar';
+import { InnerContainer } from '../CustomerOrder/style';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import UserInfo from '../../components/UserInfo/UserInfo';
-import { MainPart, Container } from './style';
-import { ProfileData } from './type';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { OrderItem } from '../../modules/OrderCard/type';
-import { OrderCard } from '../../modules/OrderCard/OrderCard';
-import { HelpOutline } from '@mui/icons-material';
-const ProfileAvatar = lazy(() => import('../../modules/ProfileAvatar/ProfileAvatar'));
 
 export const CustomerAnswer = () => {
   const [orders, setOrders] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { t } = useTranslation('reviews');
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchReviewedOrders = async () => {
       try {
         const token = sessionStorage.getItem('token');
-        if (!token) {
-          toast.error('Авторизуйтесь');
-          navigate('/login');
-          return;
-        }
-
-        const response = await fetch('http://localhost:5000/api/orders/reviews', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await fetch('http://localhost:5000/api/orders/user', {
+          headers: { Authorization: `Bearer ${token}` },
         });
-
-        if (!response.ok) throw new Error('Ошибка загрузки');
-
         const data = await response.json();
-        setOrders(data);
+        const reviewed = (data.history || []).filter((o: any) => o.review);
+        setOrders(reviewed);
       } catch (err) {
-        toast.error('Не удалось загрузить заказы');
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
-    fetchOrders();
-  }, [navigate]);
+    fetchReviewedOrders();
+  }, []);
 
   if (loading) return <CircularProgress />;
 
@@ -54,24 +40,45 @@ export const CustomerAnswer = () => {
       <Header active="profile" />
       <MainPart>
         <SideBar active="answer" />
+        <InnerContainer style={{ flex: 1 }}>
+          <Typography variant="h4" sx={{ fontFamily: '"Kurale", serif', mb: 3 }}>
+            {t('reviews:yourReviews')}
+          </Typography>
 
-        <Container style={{ flex: 1 }}>
           {orders.length > 0 ? (
-            orders.map(order => order.orderCatalog.map((entry: any) => <h1>help</h1>))
+            orders.map(order => (
+              <ReviewSection key={order.id}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Rating value={order.review.mark} readOnly />
+                  <Typography variant="caption" color="text.secondary">
+                    Заказ от {new Date(order.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Box>
+
+                <Typography variant="body1" sx={{ fontStyle: 'italic', my: 2 }}>
+                  "{order.review.text}"
+                </Typography>
+
+                {order.review.answer ? (
+                  <OwnerAnswer>
+                    <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 800 }}>
+                      Кондитер ответил:
+                    </Typography>
+                    <Typography variant="body2">
+                      {order.review.answer.text}
+                    </Typography>
+                  </OwnerAnswer>
+                ) : (
+                  <Typography variant="caption" sx={{ opacity: 0.6 }}>
+                    Ожидаем ответ от владельца...
+                  </Typography>
+                )}
+              </ReviewSection>
+            ))
           ) : (
-            <>
-              <img
-                style={{ width: '300px', height: '300px', borderRadius: '50%', opacity: 0.6 }}
-                src="/favicon.png"
-                alt=""
-              />
-              <Typography variant="h2">У вас пока нет заказов</Typography>
-              <Button variant="contained" onClick={() => navigate('/catalog')}>
-                Перейти в каталог
-              </Button>
-            </>
+            <Typography sx={{ textAlign: 'center', mt: 10 }}>Вы еще не оставляли отзывов.</Typography>
           )}
-        </Container>
+        </InnerContainer>
       </MainPart>
     </Container>
   );

@@ -25,3 +25,14 @@ export const ContentContainer = styled(Box)(({ theme }) => (
     }
 ))
 
+export const NoHistoryContainer = styled(Box)(({ theme }) => (
+    {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        padding: theme.spacing(10, 0),
+        // gap: theme.spacing(5),
+    }
+))

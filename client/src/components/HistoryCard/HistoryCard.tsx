@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { CardContainer, InfoContainer, Image } from './style';
 import { HistoryCardProps } from './type';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useStore } from '../../store/cartSlice';
+import { cartStore } from '../../store/cartSlice';
 import { AddToCartForm } from '../../modules/AddToCartForm/AddToCartForm';
 
 const HistoryCard: React.FC<HistoryCardProps> = ({ imageSrc, title, prompt, onClick }) => {
   const { t } = useTranslation('common');
-  const cart = useStore();
+  const cart = cartStore();
   // const [isOpen, setOpen] = useState(false);
 
   // const handleOpen = () => {
@@ -27,14 +27,15 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ imageSrc, title, prompt, onCl
 
         <Typography variant="body1">{prompt}</Typography>
 
-        <Button variant="contained" onClick={onClick}>
-          {t('ChooseDecor')}
-        </Button>
-        {/* {isOpen ?? <AddToCartForm img={imageSrc} onClick={handleClose} />} */}
+        <Box sx={{ display: 'flex', gap: '10px', mt: 2 }}>
+          <Button variant="contained" onClick={onClick}>
+            {t('ChooseDecor')}
+          </Button>
+          <Button variant="contained" onClick={() => { }}>
+            {t('delete')}
+          </Button>
+        </Box>
 
-        <Button variant="contained" onClick={() => {}}>
-          {t('delete')}
-        </Button>
       </InfoContainer>
     </CardContainer>
   );

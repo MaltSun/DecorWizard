@@ -7,15 +7,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrderFormData, OrderUserSchema } from './type';
 import { useCatalogStore } from '../../store/catalogSlice';
-import { CartItem, useStore } from '../../store/cartSlice';
+import { CartItem, cartStore } from '../../store/cartSlice';
 import { toast } from 'react-toastify';
 
 export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => void }) => {
-  const { cart, update, remove, clear, getTotalItems } = useStore();
+  const { cart, update, remove, clear, getTotalItems } = cartStore();
   const [generalLoading, setLoading] = useState(false);
 
   const { catalog, loading, error, fetchCatalog } = useCatalogStore();
-  const addToCart = useStore(state => state.addFromWizard);
+  const addToCart = cartStore(state => state.addFromWizard);
   const handleAddToCart = (item: CartItem) => addToCart(item);
 
   useEffect(() => {

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, ContentContainer } from './style';
+import { Container, ContentContainer, NoHistoryContainer } from './style';
 import Header from '../../components/Header/Header';
 import { HistoryCardProps } from '../../components/HistoryCard/type';
 import HistoryCard from '../../components/HistoryCard/HistoryCard';
 import { Typography } from '@mui/material';
 import { AddToCartForm } from '../../modules/AddToCartForm/AddToCartForm';
+import Footer from '../../components/Footer/Footer';
 
 const History = () => {
   const { t } = useTranslation(['common']);
@@ -21,21 +22,24 @@ const History = () => {
   const handleOpen = () => {
     setOpen(true);
   };
+
+
   return (
     <Container>
       <Header active={'history'} />
-      <ContentContainer>
         {data.length > 0 ? (
           data.map((card, index) => (
-            <>
+            <ContentContainer>
               <HistoryCard key={index} {...card} onClick={handleOpen} />
               {isOpen && <AddToCartForm img={card.imageSrc} onClose={handleClose} />}
-            </>
+            </ContentContainer>
           ))
         ) : (
-          <Typography variant="body1">{t('noHistory')}</Typography>
+          <NoHistoryContainer>
+            <img src="../public/logo.png" alt="no history" style={{ width: '300px', marginBottom: '20px' }} />
+            <Typography variant="h2">{t('noHistory')}</Typography>
+          </NoHistoryContainer>
         )}
-      </ContentContainer>
     </Container>
   );
 };

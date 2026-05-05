@@ -22,10 +22,12 @@ import {
   ShoppingCartCheckout as CheckoutIcon,
 } from '@mui/icons-material';
 
-import { useStore } from '../../store/cartSlice';
+import { cartStore } from '../../store/cartSlice';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useCatalogStore } from '../../store/catalogSlice';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface CartDrawerProps {
   open: boolean;
@@ -33,8 +35,9 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ open, onClose }: CartDrawerProps) {
-  const { cart, update, remove, clear, getTotalItems } = useStore();
+  const { cart, update, remove, clear, getTotalItems } = cartStore();
 
+  const { t } = useTranslation('cart');
   const navigate = useNavigate();
 
   const catalog = useCatalogStore.getState().catalog;
@@ -55,9 +58,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
   const totalPrice = cartItems.reduce((sum, item) => sum + (item?.subtotal || 0), 0);
   const isEmpty = cart.length === 0;
 
+
   const handleNavigateToOrder = () => {
-    onClose();
-    navigate(AppRoutes.Order);
+    if (sessionStorage.getItem('user')) {
+      onClose();
+      navigate(AppRoutes.Order.Path);
+    } else {
+      toast.info(t('need_to_login'), { autoClose: 2000 });
+      navigate(AppRoutes.Login);
+    }
+
   };
 
   return (
@@ -88,7 +98,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               <CheckoutIcon fontSize="large" />
             </Badge>
             <Typography variant="h5" component="div">
-              Корзина
+              {t('cart')}
             </Typography>
           </Stack>
 
@@ -99,11 +109,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
         <Box sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
           {isEmpty ? (
-            <EmptyCart onClose={onClose} />
+            <EmptyCart onClose={() => navigate(AppRoutes.Catalog)} />
           ) : (
             <List disablePadding>
               {cartItems.map(item => (
-                <React.Fragment key={item.id}>
+                <React.Fragment key={item?.id}>
                   <ListItem
                     alignItems="flex-start"
                     sx={{
@@ -117,8 +127,8 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <ListItemAvatar>
                       <Avatar
                         variant="rounded"
-                        src={item.image}
-                        alt={item.name}
+                        src={item?.image}
+                        alt={item?.name}
                         sx={{ width: 80, height: 80, borderRadius: 2 }}
                       />
                     </ListItemAvatar>
@@ -126,13 +136,13 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <ListItemText
                       primary={
                         <Typography variant="body1" fontWeight={600}>
-                          {item.name}
+                          {item?.name}
                         </Typography>
                       }
                       secondary={
                         <>
                           <Typography variant="h3" color="text.secondary">
-                            {Number(item.price).toLocaleString('ru-RU')} ₽
+                            {Number(item?.price).toLocaleString('ru-RU')} ₽
                           </Typography>
                         </>
                       }
@@ -142,8 +152,8 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <Stack direction="row" spacing={1} alignItems="center" sx={{ ml: 1 }}>
                       <IconButton
                         size="small"
-                        onClick={() => update(item.id, item.quantity - 1)}
-                        disabled={item.quantity <= 1}
+                        onClick={() => update(item?.id, item?.quantity - 1)}
+                        disabled={item?.quantity <= 1}
                       >
                         <RemoveIcon fontSize="small" />
                       </IconButton>
@@ -156,17 +166,17 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                           fontWeight: 600,
                         }}
                       >
-                        {item.quantity}
+                        {item?.quantity}
                       </Typography>
 
-                      <IconButton size="small" onClick={() => update(item.id, item.quantity + 1)}>
+                      <IconButton size="small" onClick={() => update(item?.id, item?.quantity + 1)}>
                         <AddIcon fontSize="small" />
                       </IconButton>
 
                       <IconButton
                         size="small"
                         color="error"
-                        onClick={() => remove(item.id)}
+                        onClick={() => remove(item?.id)}
                         sx={{ ml: 1 }}
                       >
                         <DeleteIcon fontSize="small" />
@@ -191,9 +201,9 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           >
             <Stack spacing={2}>
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="h6">Итого:</Typography>
+                <Typography variant="h6">{t('total_items')}</Typography>
                 <Typography variant="h6" fontWeight={700}>
-                  {totalPrice.toLocaleString('ru-RU')} ₽
+                  {totalPrice.toLocaleString('ru-RU')} Б
                 </Typography>
               </Stack>
 
@@ -204,7 +214,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 startIcon={<CheckoutIcon />}
                 onClick={handleNavigateToOrder}
               >
-                Оформить заказ
+                {t('go_to_checkout')}
               </Button>
 
               <Button
@@ -214,7 +224,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 onClick={clear}
                 sx={{ alignSelf: 'center', mt: 1 }}
               >
-                Очистить корзину
+                {t('clear_cart')}
               </Button>
             </Stack>
           </Box>
@@ -225,6 +235,8 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 }
 
 function EmptyCart({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation('cart');
+
   return (
     <Box
       sx={{
@@ -238,11 +250,11 @@ function EmptyCart({ onClose }: { onClose: () => void }) {
       }}
     >
       <Typography variant="h5" gutterBottom>
-        Ваша корзина пуста
+        {t('empty_cart')}
       </Typography>
 
       <Button variant="contained" onClick={onClose}>
-        Продолжить покупки
+        {t('go_to_catalog')}
       </Button>
     </Box>
   );

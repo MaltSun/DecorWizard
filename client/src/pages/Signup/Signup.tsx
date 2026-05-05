@@ -12,8 +12,7 @@ const Signup = () => {
       <AuthHeader active={'signup'} />
       <MainPart>
         <Typography variant="h1">{t('auth:createAccount')}</Typography>
-        <Typography variant="body1">{t('auth:welcomeSignup')}</Typography>
-
+        
         <SignupForm />
       </MainPart>
     </Container>

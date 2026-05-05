@@ -6,8 +6,8 @@ export interface TagWeights {
 }
 
 const LIKELIHOOD_TABLE = {
-  YES: 2.0,   // Сильно повышает вероятность
-  MAYBE: 0.5, // Слабо повышает
+  YES: 2.0,  
+  MAYBE: 0.5,
   NO: -2.0,   
   IDK: 0      
 };

@@ -28,7 +28,7 @@ const LanguageSwitcher: React.FC = () => {
       }}
       onClick={toggleLanguage}
     >
-      {i18n.language === 'en' ? 'EN' : 'RU'}
+      {i18n.language === 'en' ? 'RU' : 'EN'}  
     </button>
   );
 };

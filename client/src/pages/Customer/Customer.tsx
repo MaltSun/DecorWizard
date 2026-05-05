@@ -4,7 +4,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@mui/material';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import { MainPart, Container } from './style';
+import { MainPart, Container, InnerContainer } from './style';
 import { ProfileData } from './type';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -61,10 +61,6 @@ export const Customer = () => {
     fetchProfile();
   }, []);
 
-  const handleUpdateProfile = () => {
-    fetchProfile();
-  };
-
   const { t } = useTranslation(['common']);
 
   if (loading) return <CircularProgress />;
@@ -75,13 +71,13 @@ export const Customer = () => {
       <MainPart>
         <SideBar active="profile"></SideBar>
 
-        <Container>
+        <InnerContainer>
           <Suspense fallback={<CircularProgress />}>
             <ProfileAvatar
               name={profileData?.name || t('firstName')}
-              avatar={profileData?.avatar || ''}
+              avatar={profileData?.bakeryName || ''}
               userId={profileData?.id || ''}
-              onUpdate={() => {}}
+              onUpdate={() => { }}
             />
           </Suspense>
 
@@ -89,18 +85,18 @@ export const Customer = () => {
             name={profileData?.name || ''}
             email={profileData?.email || ''}
             phone={profileData?.phone || ''}
-            created_at={profileData?.createdAt || ''}
           />
+          
           <Suspense>
             <UserUpdateProfile
               userId={profileData?.id || ''}
               name={profileData?.name || ''}
               phone={profileData?.phone || ''}
               email={profileData?.email || ''}
-              onUpdate={() => {}}
+              onUpdate={() => { }}
             ></UserUpdateProfile>
           </Suspense>
-        </Container>
+        </InnerContainer>
       </MainPart>
     </Container>
   );

@@ -1,4 +1,5 @@
 import { styled, Box, Button } from "@mui/material";
+import theme from "../../../theme/theme";
 
 export const Container = styled(Box)(({ theme }) => (
     {
@@ -7,6 +8,7 @@ export const Container = styled(Box)(({ theme }) => (
         alignItems: 'center',
         width: '100%',
         minHeight: '100vh',
+        background: theme.palette.background.default,
     }
 ))
 
@@ -17,32 +19,16 @@ export const ContentContainer = styled(Box)(({ theme }) => (
         alignItems: 'center',
         justifyContent: 'center',
         width: '80%',
-        padding: theme.spacing(20),
-        gap: theme.spacing(10),
-        background: theme.palette.background.default,
-        borderRadius: '15px',
+        padding: theme.spacing(15, 10),
+        gap: theme.spacing(5),
     }
 ))
 
-export const StepsContainer = styled(ContentContainer)(({theme}) => ({
-    paddingTop: theme.spacing(5)}))
-
-export const HorizontContentContainer = styled(ContentContainer)(() => ({
+export const HorizontContentContainer = styled(ContentContainer)(({theme}) => ({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-}))
-
-export const ArticleContainer = styled(ContentContainer)(() => ({
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    width: '50%',
-    gap: '20px'
-}))
-
-export const BufferContainer = styled(Box)(() => ({
-    height: '5vh'
+    padding: theme.spacing(5),
 }))
 
 export const ItemsContainer = styled(ContentContainer)(() => ({
@@ -61,6 +47,7 @@ export const ButtonContainer = styled(Box)(({ theme }) => ({
     gap: theme.spacing(4)
 }))
 
-// export const AnswerButton = styled(Button)(({ theme }) => ({
-//     padding: theme.spacing(2, 4),
-//     fontSize: '1.2rem',
+export const FontImage = styled('img')(() => ({
+    width: '100%',
+    height: 'auto',
+}))

@@ -26,9 +26,6 @@ const Slider: React.FC<SliderProps> = ({ content }) => {
       <ReactSlidy
         doAfterSlide={updateSlide}
         slide={actualSlide}
-        sx={{
-          width: '100%',
-        }}
         keyboardNavigation
       >
         {content.map(item => (

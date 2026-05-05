@@ -1,29 +1,5 @@
 import { prisma } from "../config/prisma.js";
 import Stripe from "stripe";
-// export const createOrder = async (req, res) => {
-//   const { design, status = "new", catalogIds } = req.body; 
-//   const userId = req.user.id;
-
-//   const order = await prisma.order.create({
-//     data: {
-//       userId,
-//       design,
-//       status,
-//     },
-//   });
-
-//   if (catalogIds?.length) {
-//     await prisma.orderCatalog.createMany({
-//       data: catalogIds.map((catalogId) => ({
-//         orderId: order.id,
-//         catalogId,
-//       })),
-//     });
-//   }
-
-//   res.status(201).json(order);
-// };
-
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -90,10 +66,30 @@ export const createOrder = async (req, res) => {
   }
 };
 
+
+// export const getUserOrders = async (req, res) => {
+//   try {
+//     const orders = await prisma.order.findMany({
+//       where: { userId: req.user.id },
+//       orderBy: { createdAt: 'desc' }, // Свежие сверху
+//       include: {
+//         orderCatalog: {
+//           include: { catalog: true },
+//         },
+//       },
+//     });
+
+//     res.json(orders); 
+//   } catch (error) {
+//     res.status(500).json({ error: "Ошибка сервера" });
+//   }
+// };
+
 export const getUserOrders = async (req, res) => {
   try {
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
+      orderBy: { createdAt: 'desc' },
       include: {
         orderCatalog: {
           include: { catalog: true },
@@ -101,18 +97,16 @@ export const getUserOrders = async (req, res) => {
       },
     });
 
-    const flatOrders = orders.flatMap((order) =>
-      order.orderCatalog.map((item) => ({
-        id: item.id,
-        name: item.catalog.name,
-        price: item.catalog.price,
-        img: item.catalog.img,
-        quantity: item.quantity,
-        orderDate: order.createdAt, 
-      })),
+    // Разделяем заказы на группы
+    const active = orders.filter(order => 
+      order.status === 'new' || order.status === 'in_progress'
+    );
+    
+    const history = orders.filter(order => 
+      order.status === 'completed' || order.status === 'cancelled'
     );
 
-    res.json(flatOrders);
+    res.json({ active, history }); 
   } catch (error) {
     res.status(500).json({ error: "Ошибка сервера" });
   }

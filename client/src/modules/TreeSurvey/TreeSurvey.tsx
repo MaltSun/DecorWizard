@@ -37,7 +37,6 @@ const TreeSurvey: React.FC<TreeSurveyProps> = ({ treeName, root, onComplete }) =
 
       const weights = calculateTagWeights(dummyData, updatedAnswers);
       const top = getTopTags(weights, 3);
-      console.log(` ${treeName} завершено:`, top);
       onComplete(top);
     }
   };
