@@ -1,0 +1,18 @@
+{
+    "catalog": {
+        "title": "Каталог",
+        "searchPlaceholder": "Поиск продукта...",
+        "noResults": "Продукты не найдены.",
+        "loading": "Загрузка каталога..."
+    },
+    "catalogPopup": {
+        "closeButton": "Закрыть"
+    },
+    "common": {
+        "calories": "Калории",
+        "carbs": "Углеводы",
+        "proteins": "Белки",
+        "fats": "Жиры",
+        "composition": "Состав"
+    }
+}

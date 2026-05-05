@@ -1,0 +1,20 @@
+{
+  "catalog": {
+    "title": "Catalog",
+    "searchPlaceholder": "Search for a product...",
+    "noResults": "No products found.",
+    "loading": "Loading catalog..."
+  },
+  "catalogPopup": {
+    "closeButton": "Close"
+  },
+  "common": {
+    "calories": "Calories",
+    "carbs": "Carbs",
+    "proteins": "Proteins",
+    "fats": "Fats",
+    "composition": "Composition",
+    "kkal": "kcal",
+    "gramms": "g"
+  }
+}

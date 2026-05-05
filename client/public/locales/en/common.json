@@ -13,9 +13,21 @@
   "no": "No",
   "idk": "idk",
   "maybe": "Maybe",
-  "welcome_message": "Welcome to DecorWizard! Your AI-powered interior design assistant. ",
+  "welcome_message": "Welcome to DecorWizard! Your AI-powered cake design assistant for yours creative ideas ",
   "start_building": "Are you ready to start building your dream?",
   "step": "Step",
   "how_we_work": "How we are work",
-  "profile": "profile"
+  "profile": "profile",
+  "addToCard": "Add to card",
+  "decorwizard": "DecorWizard",
+  "en": "EN",
+  "ru": "RU",
+  "redo": "Redo",
+  "submit": "Submit",
+  "footer_status": "Magic in every pixel, inspiration in every layer",
+  "with_love": "Made with",
+  "personal_desserts": "Personal desserts of your dreams",
+  "contact_us": "Contact us",
+  "all_rights_reserved": "All rights reserved",
+  "noHistory": "You don't have any history yet"
 }
