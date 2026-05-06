@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { lazy, Suspense, useMemo, useState } from 'react';
 import Header from '../../components/Header/Header';
 import { useEffect } from 'react';
 import CatalogItem from '../../components/CatalogItem/CatalogItem';
@@ -7,11 +7,11 @@ import { Box, TextField, Pagination, Stack, CircularProgress } from '@mui/materi
 import { Container, CatalogBlock } from './style';
 import { useCart } from '../Cart/useCart';
 import CartButton from '../../components/CartButton/CartButton';
-import { useStore } from '../../store/cartSlice';
+import { cartStore } from '../../store/cartSlice';
 import { useCatalogStore } from '../../store/catalogSlice';
 import { toast } from 'react-toastify';
-import CatalogPopup from '../../components/CatalogPopup/CatalogPopup';
-import { set } from 'zod';
+import Footer from '../../components/Footer/Footer';
+const CatalogPopup = lazy(() => import('../../components/CatalogPopup/CatalogPopup'));
 
 const Catalog = () => {
   const { t } = useTranslation();
@@ -25,12 +25,12 @@ const Catalog = () => {
   const [isOpen, setOpen] = useState(false);
   const [item, setItem] = useState();
 
-  const cartItems = useStore(state => state.cart);
+  const cartItems = cartStore(state => state.cart);
 
-  const addToCart = useStore(state => state.add);
-  const updateQuantity = useStore(state => state.update);
-  const removeFromCart = useStore(state => state.remove);
-  const getItemQuantity = useStore(state => state.getItemQuantity);
+  const addToCart = cartStore(state => state.add);
+  const updateQuantity = cartStore(state => state.update);
+  const removeFromCart = cartStore(state => state.remove);
+  const getItemQuantity = cartStore(state => state.getItemQuantity);
 
   const handleAddToCart = (itemId: string) => addToCart(itemId);
   const handleUpdateQuantity = (itemId: string, q: number) => updateQuantity(itemId, q);
@@ -82,19 +82,22 @@ const Catalog = () => {
       <Header active="catalog" />
 
       {isOpen && (
-        <CatalogPopup
-          onClose={handleClearItem}
-          id={item?.id || ''}
-          name={item?.name || ''}
-          price={item?.price || 0}
-          description={item?.description || ''}
-          image={item?.image || ''}
-          kkal={item?.kcal || 0}
-          carbs={item?.carbs || 0}
-          proteins={item?.proteins || 0}
-          fats={item?.fats}
-          composition={item?.composition || ''}
-        />
+        <>
+          <Suspense fallback={<CircularProgress />} />
+          <CatalogPopup
+            onClose={handleClearItem}
+            id={item?.id || ''}
+            name={item?.name || ''}
+            price={item?.price || 0}
+            description={item?.description || ''}
+            image={item?.image || ''}
+            kkal={item?.kcal || 0}
+            carbs={item?.carbs || 0}
+            proteins={item?.proteins || 0}
+            fats={item?.fats}
+            composition={item?.composition || ''}
+          />
+        </>
       )}
 
       <TextField
@@ -116,13 +119,7 @@ const Catalog = () => {
             }}
             onDoubleClick={() => handleItemClick(item)}
           >
-            <CatalogItem
-              name={item.name}
-              price={item.price}
-              image={item.image}
-              id={item.id}
-              
-            />
+            <CatalogItem name={item.name} price={item.price} image={item.image} description={item.description} />
 
             <CartButton
               itemId={item.id}
@@ -136,7 +133,7 @@ const Catalog = () => {
       </CatalogBlock>
 
       {pageCount > 1 && (
-        <Stack spacing={2} sx={{ mt: 4, alignItems: 'center' }}>
+        <Stack spacing={2} sx={{ mt: 4, alignItems: 'center', mb: 4 }}>
           <Pagination
             count={pageCount}
             page={page}
@@ -154,6 +151,8 @@ const Catalog = () => {
           <p>{t('catalog.noResults')}</p>
         </Box>
       )}
+
+      <Footer />
     </Container>
   );
 };

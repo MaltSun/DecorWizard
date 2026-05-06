@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export interface CartItem {
   id: string;
@@ -19,7 +19,7 @@ export interface IStore {
   getTotalItems: () => number;
 }
 
-export const useStore = create<IStore>()(
+export const cartStore = create<IStore>()(
   persist(
     (set, get) => ({
       cart: [],
@@ -79,6 +79,9 @@ export const useStore = create<IStore>()(
         return get().cart.reduce((total, item) => total + item.quantity, 0);
       },
     }),
-    { name: 'cart-storage' }
+    {
+      name: 'cart-storage', 
+      storage: createJSONStorage(() => sessionStorage), 
+    }
   )
 );

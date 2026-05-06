@@ -1,51 +1,44 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react';
-import Header from '../../components/Header/Header';
-import SideBar from '../../components/SideBar/SideBar';
-import { useTranslation } from 'react-i18next';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import UserInfo from '../../components/UserInfo/UserInfo';
-import { MainPart, Container } from './style';
-import { ProfileData } from './type';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
+import { CircularProgress, Typography, Button, Box } from '@mui/material';
+import { InnerContainer, MainPart, Container } from '../Customer/style';
+
 import { useNavigate } from 'react-router-dom';
-import { OrderItem } from '../../modules/OrderCard/type';
-import { OrderCard } from '../../modules/OrderCard/OrderCard';
-import { HelpOutline } from '@mui/icons-material';
-const ProfileAvatar = lazy(() => import('../../modules/ProfileAvatar/ProfileAvatar'));
+import { useTranslation } from 'react-i18next';
+import ReviewModal from '../../modules/ReviewModal/ReviewModal';
+import SideBar from '../../components/SideBar/SideBar';
+import Header from '../../components/Header/Header';
+import { OrderHeader, OrderSection } from '../CustomerOrder/style';
 
 export const CustomerReview = () => {
   const [orders, setOrders] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { t } = useTranslation('reviews');
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-          toast.error('Авторизуйтесь');
-          navigate('/login');
-          return;
-        }
+ const fetchPendingReviews = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await fetch('http://localhost:5000/api/orders/user', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-        const response = await fetch('http://localhost:5000/api/orders/reviews', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    if (!response.ok) {
+       throw new Error(`Ошибка сервера: ${response.status}`);
+    }
 
-        if (!response.ok) throw new Error('Ошибка загрузки');
+    const data = await response.json();
+    const history = data?.history || [];
+    const pending = history.filter((o: any) => o.status === 'completed' && !o.review);
+    setOrders(pending);
+  } catch (err) {
+    console.error("Review fetch error:", err instanceof Error ? err.message : String(err));
+  } finally {
+    setLoading(false);
+  }
+};
 
-        const data = await response.json();
-        setOrders(data);
-      } catch (err) {
-        toast.error('Не удалось загрузить заказы');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOrders();
-  }, [navigate]);
+  useEffect(() => { fetchPendingReviews(); }, []);
 
   if (loading) return <CircularProgress />;
 
@@ -54,25 +47,46 @@ export const CustomerReview = () => {
       <Header active="profile" />
       <MainPart>
         <SideBar active="review" />
+        <InnerContainer style={{ flex: 1 }}>
+          <Typography variant="h4" sx={{ fontFamily: '"Kurale", serif', mb: 3 }}>
+            {t('pendingReviews')}
+          </Typography>
 
-        <Container style={{ flex: 1 }}>
           {orders.length > 0 ? (
-            orders.map(order => order.orderCatalog.map((entry: any) => <h1>help</h1>))
+            orders.map(order => (
+              <OrderSection key={order.id} sx={{ mb: 2, p: 3 }}>
+                <OrderHeader>
+                  <Typography variant="h6" sx={{ fontFamily: '"Kurale", serif' }}>
+                    Заказ от {new Date(order.createdAt).toLocaleDateString()}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={() => setSelectedOrderId(order.id)}
+                    sx={{ textTransform: 'none', fontFamily: '"Kurale", serif' }}
+                  >
+                    {t('leaveReview')}
+                  </Button>
+                </OrderHeader>
+                <Typography variant="body2" color="text.secondary">
+                  Состав: {order.orderCatalog.map((e: any) => e.catalog.name).join(', ')}
+                </Typography>
+              </OrderSection>
+            ))
           ) : (
-            <>
-              <img
-                style={{ width: '300px', height: '300px', borderRadius: '50%', opacity: 0.6 }}
-                src="/favicon.png"
-                alt=""
-              />
-              <Typography variant="h2">У вас пока нет заказов</Typography>
-              <Button variant="contained" onClick={() => navigate('/catalog')}>
-                Перейти в каталог
-              </Button>
-            </>
+            <Box sx={{ textAlign: 'center', mt: 5 }}>
+              <img src="/favicon.png" style={{ width: 150, opacity: 0.5 }} alt="" />
+              <Typography variant="h5" sx={{ mt: 2 }}> {t('allReviewed')}</Typography>
+            </Box>
           )}
-        </Container>
+        </InnerContainer>
       </MainPart>
+
+      <ReviewModal
+        open={!!selectedOrderId}
+        onClose={() => setSelectedOrderId(null)}
+        orderId={selectedOrderId || ''}
+        onSuccess={fetchPendingReviews}
+      />
     </Container>
   );
 };

@@ -6,19 +6,24 @@ import GTranslateIcon from '@mui/icons-material/GTranslate';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 export const StyledList = styled(List)(({ theme }) => ({
-   display: 'flex',
+  display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
   height: '100vh',
   backgroundColor: theme.palette.background.default,
+  zIndex: 999,
+  position: 'sticky',
+  left: 0,
+  top: 100,
+  width: '25%',
 }));
 
 export const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  width: '30%',
-  padding: theme.spacing(3),
+  width: '100%',
+  // padding: theme.spacing(3),
   gap: theme.spacing(3),
   marginBottom: '0',
 }));
@@ -79,4 +84,5 @@ export const StyledListItemText = styled(ListItemText, {
       duration: theme.transitions.duration.short,
     }),
   },
+  width: '100%'
 }));

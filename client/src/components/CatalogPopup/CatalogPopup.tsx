@@ -5,7 +5,7 @@ import { ButtonStack, Container, Description, Popup } from './style';
 import { useTranslation } from 'react-i18next';
 import CartButton from '../CartButton/CartButton';
 import { useCatalogStore } from '../../store/catalogSlice';
-import { useStore } from '../../store/cartSlice';
+import { cartStore } from '../../store/cartSlice';
 
 const CatalogPopup: React.FC<CatalogPopupProps> = ({
   id,
@@ -20,12 +20,12 @@ const CatalogPopup: React.FC<CatalogPopupProps> = ({
   composition,
   onClose,
 }) => {
-  const { t } = useTranslation(['common', 'catalog']);
+  const { t } = useTranslation([ 'catalog']);
 
-  const addToCart = useStore(state => state.add);
-  const updateQuantity = useStore(state => state.update);
-  const removeFromCart = useStore(state => state.remove);
-  const getItemQuantity = useStore(state => state.getItemQuantity);
+  const addToCart = cartStore(state => state.add);
+  const updateQuantity = cartStore(state => state.update);
+  const removeFromCart = cartStore(state => state.remove);
+  const getItemQuantity = cartStore(state => state.getItemQuantity);
 
   const handleAddToCart = (itemId: string) => addToCart(itemId);
   const handleUpdateQuantity = (itemId: string, q: number) => updateQuantity(itemId, q);
@@ -42,21 +42,21 @@ const CatalogPopup: React.FC<CatalogPopupProps> = ({
             <Typography variant="body1">{description}</Typography>
 
             <Typography variant="body2" style={{ marginTop: '10px' }}>
-              {t('catalog.common.composition')}: {composition}
+              {t('common.composition')}: {composition}
             </Typography>
 
             <Table size="small" style={{ marginTop: '10px' }}></Table>
             <Typography variant="body2">
-              {t('catalog.common.calories')}: {kkal} kcal
+              {t('common.calories')}: {kkal} {t('common.kcal')}
             </Typography>
             <Typography variant="body2">
-              {t('catalog.common.carbs')}: {carbs} g
+              {t('common.carbs')}: {carbs} {t('common.gramms')}
             </Typography>
             <Typography variant="body2">
-              {t('catalog.common.proteins')}: {proteins} g
+              {t('common.proteins')}: {proteins} {t('common.gramms')}
             </Typography>
             <Typography variant="body2">
-              {t('catalog.common.fats')}: {fats} g
+              {t('common.fats')}: {fats} {t('common.gramms')}
             </Typography>
           </div>
         </Description>

@@ -21,7 +21,18 @@ export const ContentContainer = styled(Box)(({ theme }) => (
         height: '100%',
         minHeight: '50vh',
         padding: theme.spacing(2),
-        gap: theme.spacing(10),
+        gap: theme.spacing(5),
     }
 ))
 
+export const NoHistoryContainer = styled(Box)(({ theme }) => (
+    {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        padding: theme.spacing(10, 0),
+        // gap: theme.spacing(5),
+    }
+))

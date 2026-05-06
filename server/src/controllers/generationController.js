@@ -26,13 +26,9 @@ export async function generateImage(req, res) {
       return res.status(500).json({ error: "Cloudflare API error" });
     }
 
-    // ВАЖНО: Flux на Cloudflare возвращает JSON с полем "image" в base64,
-    // либо чистый бинарный поток в зависимости от заголовков.
-    // Если пришел JSON (как в вашем случае):
     const data = await response.json();
 
     if (data.result && data.result.image) {
-      // Отправляем клиенту чистый data-url
       const imageUrl = `data:image/jpeg;base64,${data.result.image}`;
       return res.json({ imageUrl });
     }

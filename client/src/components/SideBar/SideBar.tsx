@@ -1,4 +1,4 @@
-import {  ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { ListItemButton, ListItemIcon } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,6 @@ import type { SideBarProps } from './type';
 import {
   StyledList,
   Container,
-  UserStack,
   UserAvatar,
   StyledMovingIcon,
   StyledGTranslateIcon,
@@ -39,6 +38,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
         <ListItemButton
           onClick={handleUsersNavigate}
           selected={active === 'profile'}
+          sx={{ width: '100%' }}
         >
           <ListItemIcon>
             {userData.avatar ? (
@@ -50,8 +50,9 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           <StyledListItemText primary={`${userData.name}`} />
         </ListItemButton>
         <ListItemButton
-         selected={active === 'order'}
+          selected={active === 'order'}
           onClick={handleOrderNavigate}
+          sx={{ width: '100%' }}
         >
           <ListItemIcon>
             <StyledMovingIcon isActive={active === 'order'} />
@@ -61,6 +62,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
         <ListItemButton
           selected={active === 'review'}
           onClick={handleReviewNavigate}
+          sx={{ width: '100%' }}
         >
           <ListItemIcon>
             <StyledGTranslateIcon isActive={active === 'review'} />
@@ -70,6 +72,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
         <ListItemButton
           selected={active === 'answer'}
           onClick={handleAnswerNavigate}
+          sx={{ width: '100%' }}
         >
           <ListItemIcon>
             <StyledPortraitIcon isActive={active === 'answer'} />

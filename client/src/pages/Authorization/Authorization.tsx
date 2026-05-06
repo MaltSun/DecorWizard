@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
-import { MainPart, Container } from '../ForgotPassword/style';
+import { MainPart, Container } from '../Signup/style';
 import LoginForm from '../../modules/AuthForm/LoginForm';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';

@@ -6,7 +6,8 @@ export const Container = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
-  minHeight: '90vh',
+  minHeight: '99vh',
+  background: theme.palette.background.default,
 }));
 
 export const MainPart = styled(Box)(({ theme }) => ({

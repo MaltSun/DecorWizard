@@ -15,41 +15,54 @@ const TreeSurvey: React.FC<TreeSurveyProps> = ({ treeName, root, onComplete }) =
     setCurrent(root);
   }, [root]);
 
-  const handleAnswer = (ans: AnswerOption) => {
-    if (!current) return;
+ const handleAnswer = (ans: AnswerOption) => {
+  if (!current) return;
 
-    const updatedAnswers = { ...answers };
-    current.tags.forEach(tag => {
-      updatedAnswers[tag] = ans;
-    });
-    setAnswers(updatedAnswers);
+  const newAnswers = { ...answers };
+  current.tags.forEach(tag => {
+    newAnswers[tag] = ans;
+  });
 
-    const next = getNextQuestion(current, ans);
+   setAnswers(newAnswers);
 
-    if (next) {
-      setCurrent(next);
-    } else {
-      const dummyData = Object.keys(updatedAnswers).map((tag, index) => ({
-        tag,
-        index,
-        question: '',
-      }));
+  const next = getNextQuestion(current, ans);
 
-      const weights = calculateTagWeights(dummyData, updatedAnswers);
-      const top = getTopTags(weights, 3);
-      console.log(` ${treeName} завершено:`, top);
-      onComplete(top);
-    }
-  };
+  if (next) {
+    setCurrent(next);
+  } else {
+    const tagsToCalculate = Object.keys(newAnswers).map(tag => ({
+      tag,
+      index: 1.0,
+      question: '',
+    }));
+
+    const weights = calculateTagWeights(tagsToCalculate as any, newAnswers);
+    
+    const top = getTopTags(weights, 5); // Сначала получим всё для отладки
+
+    console.log("Внутри TreeSurvey (все ответы):", newAnswers);
+    console.log("Рассчитанные веса до фильтрации:", weights);
+    console.log("Топ после фильтрации (>0):", top.filter(t => t.weight > 0));
+
+    onComplete(top.filter(t => t.weight > 0)); 
+  }
+};
 
   if (!current) return null;
 
   return (
     <>
-      <Typography variant="h2">{current.question.toUpperCase()}</Typography>
+      <Typography variant="h2" sx={{ mb: 3 }}>
+        {current.question.toUpperCase()}
+      </Typography>
       <ButtonContainer>
         {[AnswerOption.YES, AnswerOption.MAYBE, AnswerOption.IDK, AnswerOption.NO].map(a => (
-          <Button variant="contained" key={a} onClick={() => handleAnswer(a)}>
+          <Button 
+            variant="contained" 
+            key={a} 
+            onClick={() => handleAnswer(a)}
+            sx={{ m: 1 }}
+          >
             {a.toUpperCase()}
           </Button>
         ))}

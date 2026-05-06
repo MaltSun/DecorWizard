@@ -19,11 +19,6 @@ export const FormStack = styled(Stack)(({ theme }) => ({
   flexDirection: 'column',
   padding: theme.spacing(5),
   width: '600px',
-  gap: theme.spacing(1),
+  gap: theme.spacing(3),
   background: 'transparent',
-}));
-
-export const FormButton = styled(Button)(() => ({
-  height: 45,
-  width: 210,
 }));

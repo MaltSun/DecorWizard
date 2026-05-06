@@ -6,7 +6,8 @@ export const Container = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
-  minHeight: '90vh',
+  minHeight: '98vh',
+  background: theme.palette.background.default,
 }));
 
 export const MainPart = styled(Box)(({ theme }) => ({
@@ -16,5 +17,5 @@ export const MainPart = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
   gap: theme.spacing(5),
   padding: theme.spacing(5),
-  height: '80vh',
+  // height: '80vh',
 }));

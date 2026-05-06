@@ -5,6 +5,8 @@ import type auth from '../locales/ru/auth.json';
 import type slider from '../locales/ru/slider.json';
 import type steps from '../locales/ru/steps.json';
 import type catalog from '../locales/ru/catalog.json';
+import type cart from '../locales/ru/cart.json';
+import type reviews from '../locales/ru/reviews.json';
 
 type Resources = {
   common: typeof common;
@@ -14,6 +16,8 @@ type Resources = {
   slider: typeof slider;
   steps: typeof steps;
   catalog: typeof catalog;
+  cart: typeof cart;
+  reviews: typeof reviews;
 };
 
 declare module 'i18next' {

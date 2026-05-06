@@ -1,21 +1,18 @@
-import { Box, styled } from '@mui/material';
+import { Box, Paper, styled } from "@mui/material";
 
-export const Container = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  padding: theme.spacing(5),
+export const OwnerAnswer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  padding: theme.spacing(2),
+  backgroundColor: '#f9f9f9',
+  borderRadius: '12px',
+  borderLeft: `4px solid ${theme.palette.primary.main}`,
+  marginLeft: theme.spacing(2),
 }));
 
-export const MainPart = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: theme.spacing(5),
-//   padding: theme.spacing(5),
-  width: '100%',
-  //   height: '60vh',
+export const ReviewSection = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  borderRadius: '16px',
+  marginBottom: theme.spacing(3),
+  backgroundColor: '#fff',
+  border: '1px solid #f0f0f0',
 }));

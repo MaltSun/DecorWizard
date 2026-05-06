@@ -1,20 +1,21 @@
-import { Box, styled } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, Rating, CircularProgress, Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-export const Container = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  minHeight: '100vh',
+export const ModalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  borderRadius: '16px',
+  boxShadow: 24,
+  p: 4,
+};
+
+export const StyledButton = styled(Button)(({ theme }) => ({
+  fontFamily: '"Kurale", serif',
+  borderRadius: '8px',
+  marginTop: theme.spacing(2),
 }));
 
-export const MainPart = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: theme.spacing(5),
-//   padding: theme.spacing(5),
-  width: '100%',
-  //   height: '60vh',
-}));

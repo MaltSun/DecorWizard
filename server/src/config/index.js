@@ -1,4 +1,3 @@
-// src/config/index.js
 import "dotenv/config";
 
 export const config = {

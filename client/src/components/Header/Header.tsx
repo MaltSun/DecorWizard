@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HeaderContainer, NavContent, NavActions, StyledButton } from './style';
+import { HeaderContainer, NavContent, NavActions, StyledButton, LogoName, BurgerDrawer, BurgerButton, BurgerNavContent, BurgerItem } from './style';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../../router/router';
 import {
@@ -73,7 +73,6 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
   };
 
   const navItems = [
-    { key: 'main', label: t('common:main'), onClick: handleMainNavigate },
     { key: 'catalog', label: t('common:catalog'), onClick: handleCatalogNavigate },
     { key: 'history', label: t('common:history'), onClick: handleHistoryNavigate },
     { key: 'profile', label: t('common:profile'), onClick: handleProfileNavigate },
@@ -85,8 +84,8 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
         key={key}
         sx={theme =>
           active === key && {
-            fontWeight: 'bold',
-            textShadow: `0 0 5px ${theme.palette.common.black}`,
+            color: theme.palette.text.primary,
+            textDecoration: 'underline'
           }
         }
         onClick={onClick}
@@ -99,26 +98,21 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
     <HeaderContainer>
       <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, gap: 2 }}>
         {isMobile && (
-          <IconButton
+          <BurgerButton
             aria-label="menu"
             onClick={() => setDrawerOpen(true)}
-            sx={t => ({ color: t.palette.primary.main })}
           >
             <BurgerIcon />
-          </IconButton>
+          </BurgerButton>
         )}
-        <Typography
-          sx={theme => ({
-            fontSize: isMobile ? '40px' : '80px',
-            color: theme.palette.primary.main,
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontFamily: 'Katibeh',
+        <LogoName
+          sx={() => ({
+            fontSize: isMobile ? '40px' : '80px'
           })}
           onClick={handleMainNavigate}
         >
-          decorwizard
-        </Typography>
+          DECORWIZARD
+        </LogoName>
       </Box>
 
       {!isMobile && (
@@ -146,45 +140,37 @@ const Header: React.FC<HeaderProps> = ({ active = 'main' }) => {
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
-      <Drawer
+      <BurgerDrawer
         anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        sx={{
-          '& .MuiDrawer-paper': {
-            backgroundColor: theme.palette.background.paper,
-            minWidth: 240,
-          },
-        }}
       >
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton
+        <BurgerNavContent>
+          <BurgerButton
             onClick={() => setDrawerOpen(false)}
             aria-label="close"
-            sx={t => ({ color: t.palette.text.primary })}
           >
             <CloseIcon />
-          </IconButton>
-        </Box>
+          </BurgerButton>
+        </BurgerNavContent>
         <List>
           {navItems.map(({ key, label, onClick }) => (
             <ListItem key={key} disablePadding>
-              <ListItemButton
-                onClick={onClick}
-                selected={active === key}
-                sx={t => ({
-                  fontFamily: 'Katibeh',
-                  fontSize: '1.25rem',
-                  textTransform: 'uppercase',
-                  color: active === key ? t.palette.text.primary : t.palette.text.secondary,
-                })}
+              <BurgerItem
+                active={active}
+                key={key}
               >
-                {label}
-              </ListItemButton>
+                <ListItemButton
+                  onClick={onClick}
+                  selected={active === key}
+                >
+                  {label}
+                </ListItemButton>
+              </BurgerItem>
             </ListItem>
           ))}
         </List>
-      </Drawer>
+      </BurgerDrawer>
     </HeaderContainer>
   );
 };

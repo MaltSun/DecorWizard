@@ -2,13 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
-import { BoxForm, FormButton, FormPaper, FormStack } from '../AuthForm/style';
 import { SignupUserSchema, type SignupFormData } from './type';
 import { saveAuthData } from '../../utils/authUtils';
+import { BoxForm, FormPaper, FormStack } from '../AuthForm/style';
 
 const SignupForm = () => {
   const {
@@ -22,14 +22,12 @@ const SignupForm = () => {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      // Удаляем confirmPassword перед отправкой на сервер
-      // Устанавливаем роль по умолчанию, если не указана
       const { confirmPassword, ...signupData } = data;
       const dataToSend = {
         ...signupData,
         role: signupData.role || 'CUSTOMER',
       };
-      
+
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,7 +46,6 @@ const SignupForm = () => {
         return;
       }
 
-      // Сохраняем токен и данные пользователя
       saveAuthData({
         token: result.token,
         user: result.user,
@@ -61,8 +58,7 @@ const SignupForm = () => {
         transition: Bounce,
       });
 
-      // Перенаправляем на главную страницу после успешной регистрации
-      navigate(AppRoutes.Main);
+      navigate(AppRoutes.Login);
     } catch (error: any) {
       toast.error(error.message || t('common:error') || 'Произошла ошибка', {
         position: 'top-center',
@@ -81,7 +77,7 @@ const SignupForm = () => {
     <BoxForm>
       <FormPaper elevation={0}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormStack spacing={5}>
+          <FormStack >
             <TextField
               {...register('email')}
               label={t('email')}
@@ -89,7 +85,7 @@ const SignupForm = () => {
               fullWidth
               error={!!errors.email}
               helperText={errors.email?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
             <TextField
@@ -99,7 +95,7 @@ const SignupForm = () => {
               fullWidth
               error={!!errors.name}
               helperText={errors.name?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
             <TextField
@@ -109,7 +105,7 @@ const SignupForm = () => {
               fullWidth
               error={!!errors.phone}
               helperText={errors.phone?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
             <TextField
@@ -120,7 +116,7 @@ const SignupForm = () => {
               fullWidth
               error={!!errors.password}
               helperText={errors.password?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
             <TextField
@@ -131,28 +127,28 @@ const SignupForm = () => {
               fullWidth
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
-            <FormButton
+            <Button
               variant="contained"
               size="large"
               type="submit"
               // disabled={loading}
               fullWidth
-              // loading={loading}
+            // loading={loading}
             >
               {t('auth:createAccount')}
-            </FormButton>
+            </Button>
 
-            <FormButton
+            <Button
               variant="text"
               fullWidth
               // disabled={loading}
               onClick={handleNavigate}
             >
               {t('auth:haveAccount')}
-            </FormButton>
+            </Button>
           </FormStack>
         </form>
       </FormPaper>

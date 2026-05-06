@@ -2,11 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Bounce, toast } from 'react-toastify';
 import { zodResolver } from '@hookform/resolvers/zod';
 import theme from '../../../theme/theme';
-import { BoxForm, FormButton, FormPaper, FormStack } from './style';
+import { BoxForm, FormPaper, FormStack } from './style';
 import { ForgotPasswordSchema, type ForgotPasswordData } from './type';
 import { useState } from 'react';
 
@@ -72,7 +72,7 @@ const ForgotForm = () => {
     <BoxForm>
       <FormPaper elevation={0}>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <FormStack spacing={theme.spacing(5)}>
+          <FormStack >
             <TextField
               {...register('email')}
               label={t('email')}
@@ -83,20 +83,19 @@ const ForgotForm = () => {
               disabled={loading}
             />
 
-            <FormButton
+            <Button
               variant="contained"
-              size="large"
               type="submit"
               disabled={loading}
               fullWidth
               // loading={loading}   ← если у твоей кнопки есть проп loading
             >
               {loading ? t('loading') || 'Отправка...' : t('auth:resetPassword')}
-            </FormButton>
+            </Button>
 
-            <FormButton variant="outlined" fullWidth disabled={loading} onClick={handleNavigate}>
+            <Button variant="outlined" fullWidth disabled={loading} onClick={handleNavigate}>
               {t('auth:cancel')}
-            </FormButton>
+            </Button>
           </FormStack>
         </form>
       </FormPaper>

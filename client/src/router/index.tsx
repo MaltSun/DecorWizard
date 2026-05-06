@@ -16,6 +16,7 @@ const Customer = React.lazy(() => import('../pages/Customer/Customer'));
 const CustomerOrder = React.lazy(() => import('../pages/CustomerOrder/CustomerOrder'));
 const CustomerReview = React.lazy(() => import('../pages/CustomerReview/CustomerReview'));
 const CustomerAnswer = React.lazy(() => import('../pages/CustomerAnswer/CustomerAnswer'));
+const CheckoutPage= React.lazy(()=> import('../pages/CheckoutPage/CheckoutPage'))
 
 const Loader = () => (
   <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -35,7 +36,8 @@ const Router = () => {
         <Route path={AppRoutes.Login} element={<Authorization />} />
         <Route path={AppRoutes.Registration} element={<Registration />} />
         <Route path={AppRoutes.Catalog} element={<Catalog />} />
-        <Route path={AppRoutes.Order} element={<Order />} />
+        <Route path={AppRoutes.Order.Path} element={<Order />} />
+        <Route path={AppRoutes.Order.Children.Checkout} element={<CheckoutPage />} />
         <Route path={AppRoutes.Profile.Path} element={<Customer />} />
         <Route path={AppRoutes.Profile.Children.Order} element={<CustomerOrder />} /> 
         <Route path={AppRoutes.Profile.Children.Answer} element={<CustomerAnswer />} />

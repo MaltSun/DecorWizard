@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Bounce, toast } from 'react-toastify';
 import { AppRoutes } from '../../router/router';
 import { useNavigate } from 'react-router-dom';
-import { BoxForm, FormButton, FormPaper, FormStack } from './style';
+import { BoxForm, FormPaper, FormStack } from './style';
 import { LoginUserSchema, type LoginFormData } from './type';
 import theme from '../../../theme/theme';
 import { saveAuthData } from '../../utils/authUtils';
@@ -82,7 +82,7 @@ const LoginForm = () => {
               fullWidth
               error={!!errors.email}
               helperText={errors.email?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
             <TextField
@@ -93,28 +93,28 @@ const LoginForm = () => {
               fullWidth
               error={!!errors.password}
               helperText={errors.password?.message}
-              // disabled={loading}
+            // disabled={loading}
             />
 
-            <FormButton
+            <Button
               variant="contained"
               size="large"
               type="submit"
               // disabled={loading}
               fullWidth
-              // loading={loading}
+            // loading={loading}
             >
               {t('auth:login')}
-            </FormButton>
+            </Button>
 
-            <FormButton
+            <Button
               variant="text"
               fullWidth
               // disabled={loading}
               onClick={handleNavigate}
             >
               {t('auth:forgotPassword')}
-            </FormButton>
+            </Button>
           </FormStack>
         </form>
       </FormPaper>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ToastContainer } from 'react-toastify';
@@ -8,7 +8,8 @@ import Router from './router';
 import './locales/i18n';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './locales/i18n';
-import { GlobalStyles } from '@mui/material';
+import { cartStore } from './store/cartSlice';
+
 function App() {
   const [mode, setMode] = React.useState<ThemeMode>(() => {
     if (typeof window !== 'undefined') {
@@ -43,16 +44,16 @@ function App() {
           mode,
           ...(mode === 'dark'
             ? {
-                background: {
-                  default: '#121212',
-                  paper: '#1e1e1e',
-                },
-                text: {
-                  primary: '#FDF7F5',
-                  secondary: '#FFD0B0',
-                  disabled: '#9e9e9e',
-                },
-              }
+              background: {
+                default: '#121212',
+                paper: '#1e1e1e',
+              },
+              text: {
+                primary: '#FDF7F5',
+                secondary: '#FFD0B0',
+                disabled: '#9e9e9e',
+              },
+            }
             : {}),
         },
       }),

@@ -10,33 +10,6 @@ const AuthHeader: React.FC<AuthHeaderProps> = ({ active }) => {
   const { t } = useTranslation('auth');
   const navigate = useNavigate();
 
-  const handleLoginNavigate = () => {
-    navigate(AppRoutes.Login);
-  };
-
-  const handleRegistrationNavigate = () => {
-    navigate(AppRoutes.Login);
-  };
-
-  // return active === 'login' ? (
-  //   <AuthHeaderButtonGroup>
-  //     <ActiveButton variant="outlined" onClick={handleLoginNavigate}>
-  //       {t('login')}
-  //     </ActiveButton>
-  //     <DefButton variant="outlined" onClick={handleRegistrationNavigate}>
-  //       {t('signup')}
-  //     </DefButton>
-  //   </AuthHeaderButtonGroup>
-  // ) : (
-  //   <AuthHeaderButtonGroup>
-  //     <DefButton variant="outlined" onClick={handleLoginNavigate}>
-  //       {t('login')}
-  //     </DefButton>
-  //     <ActiveButton variant="outlined" onClick={handleRegistrationNavigate}>
-  //       {t('signup')}
-  //     </ActiveButton>
-  //   </AuthHeaderButtonGroup>
-  // );
   return (
     <AuthHeaderButtonGroup>
       <Button

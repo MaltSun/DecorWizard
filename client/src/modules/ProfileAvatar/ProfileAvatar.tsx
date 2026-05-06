@@ -1,83 +1,82 @@
 import { Avatar, CircularProgress, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// import theme from '../../theme/theme';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { Bounce, toast } from 'react-toastify';
-// import { useLazyUploadAvatar } from '../../graphql/mutations/uploadAvatar';
 import { AvatarContainer, HiddenInput, UploadBlock } from './style';
 import type { ProfileAvatarProps } from './type';
 import theme from '../../../theme/theme';
+import { toast, Bounce } from 'react-toastify';
 
 const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name, avatar, userId, onUpdate }) => {
-  const [t] = useTranslation(['common']);
-
+  const [t] = useTranslation(['auth']);
   const [loading, setLoading] = useState(false);
 
   const userJson = sessionStorage.getItem('user') || '';
-  const user = JSON.parse(userJson);
-
-  // const [uploadAvatar, { loading }] = useLazyUploadAvatar();
+  const user = userJson ? JSON.parse(userJson) : null;
 
   const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error(t('common:fileTooLarge'));
+      return;
+    }
+
     const reader = new FileReader();
+    setLoading(true);
 
-    // reader.onloadend = async () => {
-    //   const base64 = reader.result as string;
+    reader.onloadend = async () => {
+      const base64String = reader.result as string;
 
-    //   try {
-    //     const response = await uploadAvatar({
-    //       variables: {
-    //         avatar: {
-    //           userId: user.id,
-    //           base64,
-    //           size: file.size,
-    //           type: file.type,
-    //         },
-    //       },
-    //     });
+      try {
+        const token = sessionStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/users/profile', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          // Передаем base64 в поле bakeryName
+          body: JSON.stringify({
+            bakeryName: base64String 
+          }),
+        });
 
-    //     if (response?.data) {
-    //       onUpdate();
+        if (!response.ok) throw new Error('Failed to upload');
 
-    //       toast.success(t('common:successfully'), {
-    //         position: 'top-center',
-    //         autoClose: 3000,
-    //         theme: 'dark',
-    //         transition: Bounce,
-    //       });
-    //     }
-    //   } catch (error: unknown) {
-    //     let message = 'Unknown error';
+        const updatedUser = await response.json();
+        
+       const newUserContext = { ...user, bakeryName: updatedUser.bakeryName };
+        sessionStorage.setItem('user', JSON.stringify(newUserContext));
 
-    //     if (error instanceof Error) {
-    //       message = error.message;
-    //     } else if (typeof error === 'string') {
-    //       message = error;
-    //     }
+        toast.success(t('common:successfully'), {
+          position: 'top-center',
+          autoClose: 3000,
+          theme: 'dark',
+          transition: Bounce,
+        });
 
-    //     toast.error(message, {
-    //       position: 'top-center',
-    //       autoClose: 5000,
-    //       theme: 'dark',
-    //       transition: Bounce,
-    //     });
-    //   }
-    // };
+        if (onUpdate) onUpdate(); 
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : 'Error');
+      } finally {
+        setLoading(false);
+      }
+    };
 
     reader.readAsDataURL(file);
   };
 
-  if (loading) return <CircularProgress />;
-
   return (
     <AvatarContainer>
-      {avatar ? <Avatar src={avatar} /> : name ? <Avatar>{name?.[0]}</Avatar> : <Avatar />}
+      { avatar ? (
+        <Avatar src={avatar} sx={{ width: 220, height: 220 }} />
+      ) : (
+        <Avatar sx={{ width: 220, height: 220 }}>{name?.[0]?.toUpperCase() || '?'}</Avatar>
+      )}
 
-      {userId === user.id && (
+      {user && userId === user.id && (
         <UploadBlock>
           <Typography variant="h3" textTransform={'capitalize'}>
             <label htmlFor="avatar-upload">
@@ -100,7 +99,7 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ name, avatar, userId, onU
               {t('uploadAvatarImg')}
             </label>
           </Typography>
-          <Typography variant="body1" color={theme.palette.text.disabled}>
+          <Typography variant="body2" color={theme.palette.text.disabled}>
             {t('uploadRules')}
           </Typography>
         </UploadBlock>

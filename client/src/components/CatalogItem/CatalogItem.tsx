@@ -1,14 +1,32 @@
 import React from 'react';
-import { Typography } from '@mui/material';
 import { CatalogItemProps } from './type';
-import { Container } from './style';
-const CatalogItem: React.FC<CatalogItemProps> = ({ name, price, image, id }) => {
+import { ProductName, Container, ImageWrapper, ProductImage, Price, Description } from './style';
+import { Box, Typography } from '@mui/material';
+
+const CatalogItem: React.FC<CatalogItemProps> = ({
+  name,
+  price,
+  image,
+  description,
+}) => {
   return (
     <Container>
-      <img style={{ width: '150px', height: '150px' }} src={image} alt={name} />
-      <Typography variant="h6">{name}</Typography>
-      <Typography variant="h5">{price}</Typography>
-    </Container>
+      <ImageWrapper>
+        <ProductImage src={image} alt={name} />
+      </ImageWrapper>
+
+      <Box style={{ display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'start' }
+      }>
+        <Typography variant='h4'>
+          {name}
+        </Typography>
+        <Typography variant='h4'>{price}Б</Typography>
+      </Box >
+
+      {description && (
+        <Description variant="body2">{description}</Description>
+      )}
+    </Container >
   );
 };
 
