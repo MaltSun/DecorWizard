@@ -1,6 +1,6 @@
 export enum AnswerOption {
-  YES = "yes",
-  MAYBE = "maybe",
-  NO = "no",
-  IDK = "idk",
+  YES = "YES",
+  MAYBE = "MAYBE",
+  NO = "NO",
+  IDK = "IDK",
 }

@@ -19,12 +19,13 @@ export function calculateTagWeights(
   const weights: TagWeights = {};
 
   elements.forEach(({ tag, index }) => {
-    const ans = answers[tag];
+    let ans = answers[tag];
     if (!ans) return;
 
-    const prior = index;
+    const upperAns = ans.toUpperCase(); 
 
-    const likelihood = LIKELIHOOD_TABLE[ans] || 0;
+    const prior = index;
+    const likelihood = LIKELIHOOD_TABLE[upperAns as keyof typeof LIKELIHOOD_TABLE] || 0;
 
     const currentWeight = weights[tag] || 0;
     weights[tag] = currentWeight + (likelihood * prior);
@@ -35,7 +36,8 @@ export function calculateTagWeights(
 
 export function getTopTags(weights: TagWeights, count = 5) {
   return Object.entries(weights)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, count)
-    .map(([tag, weight]) => ({ tag, weight }));
+    .map(([tag, weight]) => ({ tag, weight }))
+    .filter(item => item.weight > 0) 
+    .sort((a, b) => b.weight - a.weight)
+    .slice(0, count);
 }

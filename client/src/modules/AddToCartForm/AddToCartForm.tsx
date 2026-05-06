@@ -78,8 +78,6 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
     }
   };
 
-  // const handleFormSubmit = handleSubmit(onSubmit);
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(watch() as OrderFormData);
@@ -98,7 +96,7 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
   return (
     <FormBox>
       <FormPaper elevation={0}>
-        <form style={{ opacity: 1 }} onSubmit={handleFormSubmit}>
+        <form  onSubmit={handleFormSubmit}>
           <FormStack>
             <FormImage src={img} alt="Product" />
 
