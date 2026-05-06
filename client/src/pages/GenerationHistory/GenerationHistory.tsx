@@ -11,6 +11,8 @@ import Footer from '../../components/Footer/Footer';
 const History = () => {
   const { t } = useTranslation(['common']);
   const [isOpen, setOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<HistoryCardProps | null>(null);
+
   const data: HistoryCardProps[] = sessionStorage.getItem('history')
     ? JSON.parse(sessionStorage.getItem('history') || '[]')
     : [];
@@ -23,23 +25,34 @@ const History = () => {
     setOpen(true);
   };
 
-
   return (
     <Container>
       <Header active={'history'} />
-        {data.length > 0 ? (
-          data.map((card, index) => (
-            <ContentContainer>
-              <HistoryCard key={index} {...card} onClick={handleOpen} />
-              {isOpen && <AddToCartForm img={card.imageSrc} onClose={handleClose} />}
-            </ContentContainer>
-          ))
-        ) : (
-          <NoHistoryContainer>
-            <img src="../public/logo.png" alt="no history" style={{ width: '300px', marginBottom: '20px' }} />
-            <Typography variant="h2">{t('noHistory')}</Typography>
-          </NoHistoryContainer>
-        )}
+      {data.length > 0 ? (
+        <>
+          <ContentContainer>
+            {data.map((card, index) => (
+              <HistoryCard
+                key={index}
+                {...card}
+                onClick={() => handleOpen()}
+              />
+            ))}
+          </ContentContainer>
+
+          {isOpen && (
+            <AddToCartForm
+              img={selectedCard?.imageSrc}
+              onClose={handleClose}
+            />
+          )}
+        </>
+      ) : (
+        <NoHistoryContainer>
+          <img src="/logo.png" alt="no history" style={{ width: '300px', marginBottom: '20px' }} />
+          <Typography variant="h2">{t('noHistory')}</Typography>
+        </NoHistoryContainer>
+      )}
     </Container>
   );
 };
