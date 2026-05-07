@@ -16,7 +16,7 @@ export const CustomerReview = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('reviews');
 
- const fetchPendingReviews = async () => {
+const fetchPendingReviews = async () => {
   try {
     const token = sessionStorage.getItem('token');
     const response = await fetch('http://localhost:5000/api/orders/user', {
@@ -29,10 +29,14 @@ export const CustomerReview = () => {
 
     const data = await response.json();
     const history = data?.history || [];
-    const pending = history.filter((o: any) => o.status === 'completed' && !o.review);
+
+    const pending = history.filter((o: any) => 
+      o.status === 'completed' && (!o.reviews || o.reviews.length === 0)
+    );
+    
     setOrders(pending);
   } catch (err) {
-    console.error("Review fetch error:", err instanceof Error ? err.message : String(err));
+    console.error("Review fetch error:", err);
   } finally {
     setLoading(false);
   }
@@ -47,7 +51,7 @@ export const CustomerReview = () => {
       <Header active="profile" />
       <MainPart>
         <SideBar active="review" />
-        <InnerContainer style={{ flex: 1 }}>
+        <InnerContainer >
           <Typography variant="h4" sx={{ fontFamily: '"Kurale", serif', mb: 3 }}>
             {t('pendingReviews')}
           </Typography>
@@ -57,7 +61,7 @@ export const CustomerReview = () => {
               <OrderSection key={order.id} sx={{ mb: 2, p: 3 }}>
                 <OrderHeader>
                   <Typography variant="h6" sx={{ fontFamily: '"Kurale", serif' }}>
-                    Заказ от {new Date(order.createdAt).toLocaleDateString()}
+                    {t('orderDate')} {new Date(order.createdAt).toLocaleDateString()}
                   </Typography>
                   <Button
                     variant="contained"
@@ -68,7 +72,7 @@ export const CustomerReview = () => {
                   </Button>
                 </OrderHeader>
                 <Typography variant="body2" color="text.secondary">
-                  Состав: {order.orderCatalog.map((e: any) => e.catalog.name).join(', ')}
+                  {t('orderContents')} {order.orderCatalog.map((e: any) => e.catalog.name).join(', ')}
                 </Typography>
               </OrderSection>
             ))

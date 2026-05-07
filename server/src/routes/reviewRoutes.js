@@ -6,7 +6,7 @@ const router = Router();
 
 router.use(authenticate);
 
-router.post('/', createReview);
+router.post('/create', createReview);
 router.post('/answer', requireRole('OWNER'), createAnswer);
 
 export default router;

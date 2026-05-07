@@ -3,18 +3,19 @@ import { ModalStyle, StyledButton } from './style';
 import { Box, CircularProgress, Modal, Rating, TextField, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { ReviewModalProps } from './type';
+import { toast } from 'react-toastify';
 
 export const ReviewModal: React.FC<ReviewModalProps> = ({ open, onClose, orderId, onSuccess }) => {
     const [mark, setMark] = useState<number | null>(5);
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation('reviews');
-    
+
     const handleSubmit = async () => {
         setLoading(true);
         try {
             const token = sessionStorage.getItem('token');
-            const res = await fetch('http://localhost:5000/api/reviews', {
+            const res = await fetch('http://localhost:5000/api/reviews/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,8 +27,10 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ open, onClose, orderId
             if (res.ok) {
                 onSuccess();
                 onClose();
+                toast.success(t('submitSuccess'), { position: "top-right", autoClose: 5000 });
             }
         } catch (err) {
+            toast.error(t('submitError'), { position: "top-right", autoClose: 5000 });
             console.error("Ошибка при отправке отзыва", err);
         } finally {
             setLoading(false);

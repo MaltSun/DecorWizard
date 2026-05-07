@@ -40,6 +40,7 @@ export const OrderHeader = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(3),
   paddingBottom: theme.spacing(2),
   borderBottom: '1px dashed #e0e0e0',
+  gap: theme.spacing(2),
 }));
 
 export const InnerContainer = styled(Box)(({ theme }) => ({

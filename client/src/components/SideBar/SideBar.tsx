@@ -41,8 +41,8 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           sx={{ width: '100%' }}
         >
           <ListItemIcon>
-            {userData.avatar ? (
-              <UserAvatar src={userData.avatar} />
+            {userData.bakeryName ? (
+              <UserAvatar src={userData.bakeryName} />
             ) : (
               <UserAvatar>{userData.name?.[0] ?? ''}</UserAvatar>
             )}

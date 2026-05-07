@@ -1,5 +1,9 @@
 {
-  "writeReview": "Write a Review",
+  "leaveReview": "Write a Review",
   "yourReview": "Your Review",
-  "submit": "Submit"
+  "submit": "Submit",
+  "orderContents": "Order Contents:",
+  "orderDate": "Order Date:",
+  "pendingReviews": "Pending Reviews",
+  "allReviewed": "All orders have been reviewed."
 }

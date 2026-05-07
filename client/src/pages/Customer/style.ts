@@ -4,15 +4,13 @@ export const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '100%',
-  minHeight: '100vh',
+  width: '100%'
 }));
 export const InnerContainer = styled(Container)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: theme.spacing(5),
-  gap: theme.spacing(3),
+  padding: theme.spacing(5)
 }));
 
 export const MainPart = styled(Box)(({ theme }) => ({

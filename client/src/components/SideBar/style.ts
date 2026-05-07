@@ -8,14 +8,15 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 export const StyledList = styled(List)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100vh',
+  justifyContent: 'flex-start',
   backgroundColor: theme.palette.background.default,
   zIndex: 999,
   position: 'sticky',
   left: 0,
   top: 100,
-  width: '25%',
+  width: '30%',
+  boxSizing: 'border-box',
+  height: 'calc(100vh - 100px)',
 }));
 
 export const Container = styled(Box)(({ theme }) => ({
@@ -23,7 +24,6 @@ export const Container = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'flex-start',
   width: '100%',
-  // padding: theme.spacing(3),
   gap: theme.spacing(3),
   marginBottom: '0',
 }));

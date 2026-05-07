@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react';
-import { ReviewSection, OwnerAnswer } from './style'; // Ваши новые стили
+import { ReviewSection, OwnerAnswer } from './style'; 
 import { Box, CircularProgress, Rating, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { Container, MainPart } from '../Customer/style';
+import { Container, MainPart, InnerContainer } from '../Customer/style';
 import Header from '../../components/Header/Header';
 import SideBar from '../../components/SideBar/SideBar';
-import { InnerContainer } from '../CustomerOrder/style';
 import { useTranslation } from 'react-i18next';
 
 export const CustomerAnswer = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const { t } = useTranslation('reviews');
+  const { t } = useTranslation(['reviews', 'common']);
 
   useEffect(() => {
     const fetchReviewedOrders = async () => {
@@ -22,10 +19,14 @@ export const CustomerAnswer = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
-        const reviewed = (data.history || []).filter((o: any) => o.review);
+        
+        // Объединяем активные и историю, затем фильтруем те, где ЕСТЬ отзывы
+        const allOrders = [...(data.active || []), ...(data.history || [])];
+        const reviewed = allOrders.filter((o: any) => o.reviews && o.reviews.length > 0);
+        
         setOrders(reviewed);
       } catch (err) {
-        console.error(err);
+        console.error("Fetch reviewed orders error:", err);
       } finally {
         setLoading(false);
       }
@@ -33,50 +34,57 @@ export const CustomerAnswer = () => {
     fetchReviewedOrders();
   }, []);
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 10 }}><CircularProgress /></Box>;
 
   return (
     <Container>
       <Header active="profile" />
       <MainPart>
         <SideBar active="answer" />
-        <InnerContainer style={{ flex: 1 }}>
+        <InnerContainer>
           <Typography variant="h4" sx={{ fontFamily: '"Kurale", serif', mb: 3 }}>
             {t('reviews:yourReviews')}
           </Typography>
 
           {orders.length > 0 ? (
-            orders.map(order => (
-              <ReviewSection key={order.id}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Rating value={order.review.mark} readOnly />
-                  <Typography variant="caption" color="text.secondary">
-                    Заказ от {new Date(order.createdAt).toLocaleDateString()}
-                  </Typography>
-                </Box>
+            orders.map(order => {
+              const review = order.reviews[0]; // Берем первый отзыв
+              const ownerAnswer = review.answers && review.answers[0]; // Берем первый ответ кондитера
 
-                <Typography variant="body1" sx={{ fontStyle: 'italic', my: 2 }}>
-                  "{order.review.text}"
-                </Typography>
+              return (
+                <ReviewSection key={order.id} sx={{ mb: 3, p: 2, border: '1px solid #eee', borderRadius: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Rating value={review.mark} readOnly />
+                    <Typography variant="caption" color="text.secondary">
+                      Заказ от {new Date(order.createdAt).toLocaleDateString()}
+                    </Typography>
+                  </Box>
 
-                {order.review.answer ? (
-                  <OwnerAnswer>
-                    <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 800 }}>
-                      Кондитер ответил:
-                    </Typography>
-                    <Typography variant="body2">
-                      {order.review.answer.text}
-                    </Typography>
-                  </OwnerAnswer>
-                ) : (
-                  <Typography variant="caption" sx={{ opacity: 0.6 }}>
-                    Ожидаем ответ от владельца...
+                  <Typography variant="body1" sx={{ fontStyle: 'italic', my: 2, color: '#555' }}>
+                    "{review.text}"
                   </Typography>
-                )}
-              </ReviewSection>
-            ))
+
+                  {ownerAnswer ? (
+                    <OwnerAnswer sx={{ mt: 2, p: 2, bgcolor: '#f0f7ff', borderRadius: 1, borderLeft: '4px solid #1976d2' }}>
+                      <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 800, mb: 0.5 }}>
+                        Кондитер ответил:
+                      </Typography>
+                      <Typography variant="body2">
+                        {ownerAnswer.text}
+                      </Typography>
+                    </OwnerAnswer>
+                  ) : (
+                    <Typography variant="caption" sx={{ opacity: 0.6, display: 'block', mt: 1 }}>
+                      Ожидаем ответ от кондитера...
+                    </Typography>
+                  )}
+                </ReviewSection>
+              );
+            })
           ) : (
-            <Typography sx={{ textAlign: 'center', mt: 10 }}>Вы еще не оставляли отзывов.</Typography>
+            <Typography sx={{ textAlign: 'center', mt: 10, opacity: 0.5 }}>
+              Вы еще не оставляли отзывов.
+            </Typography>
           )}
         </InnerContainer>
       </MainPart>

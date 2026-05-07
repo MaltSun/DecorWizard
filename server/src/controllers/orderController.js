@@ -66,25 +66,6 @@ export const createOrder = async (req, res) => {
   }
 };
 
-
-// export const getUserOrders = async (req, res) => {
-//   try {
-//     const orders = await prisma.order.findMany({
-//       where: { userId: req.user.id },
-//       orderBy: { createdAt: 'desc' }, // Свежие сверху
-//       include: {
-//         orderCatalog: {
-//           include: { catalog: true },
-//         },
-//       },
-//     });
-
-//     res.json(orders); 
-//   } catch (error) {
-//     res.status(500).json({ error: "Ошибка сервера" });
-//   }
-// };
-
 export const getUserOrders = async (req, res) => {
   try {
     const orders = await prisma.order.findMany({
@@ -94,10 +75,12 @@ export const getUserOrders = async (req, res) => {
         orderCatalog: {
           include: { catalog: true },
         },
+        reviews: {
+          include: { answers: true }
+        }
       },
     });
 
-    // Разделяем заказы на группы
     const active = orders.filter(order => 
       order.status === 'new' || order.status === 'in_progress'
     );
@@ -108,24 +91,11 @@ export const getUserOrders = async (req, res) => {
 
     res.json({ active, history }); 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Ошибка сервера" });
   }
 };
 
-export const updateOrderStatus = async (req, res) => {
-  if (req.user.role !== "OWNER")
-    return res.status(403).json({ error: "Только владелец" });
-
-  const { id } = req.params;
-  const { status } = req.body;
-
-  const updated = await prisma.order.update({
-    where: { id },
-    data: { status },
-  });
-
-  res.json(updated);
-};
 
 export const cancelOrder = async (req, res) => {
   const { id } = req.params;

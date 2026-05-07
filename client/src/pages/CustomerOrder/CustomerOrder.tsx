@@ -110,7 +110,7 @@ export const CustomerOrder = () => {
       <Header active="profile" />
       <MainPart>
         <SideBar active="order" />
-        <InnerContainer style={{ flex: 1 }}>
+        <InnerContainer >
           {orders.active.length > 0 ? (
             renderOrderList(orders.active)
           ) : (

@@ -1,5 +1,10 @@
 {
   "writeReview": "Написать отзыв",
   "yourReview": "Ваш отзыв",
-  "submit": "Отправить"
+  "submit": "Отправить",
+  "orderContents": "Состав заказа:",
+  "orderDate": "Дата заказа:",
+  "pendingReviews": "Ожидающие отзывы",
+  "allReviewed": "Все заказы были от reviews.",
+  "leaveReview": "Написать отзыв"
 }
