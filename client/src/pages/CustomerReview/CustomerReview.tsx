@@ -13,36 +13,34 @@ export const CustomerReview = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const navigate = useNavigate();
+
   const { t } = useTranslation('reviews');
 
-const fetchPendingReviews = async () => {
-  try {
-    const token = sessionStorage.getItem('token');
-    const response = await fetch('http://localhost:5000/api/orders/user', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  const fetchOrders = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/orders/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    if (!response.ok) {
-       throw new Error(`Ошибка сервера: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Ошибка сервера: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const history = data?.history || [];
+
+      setOrders(history);
+    } catch (err) {
+      console.error("Review fetch error:", err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const data = await response.json();
-    const history = data?.history || [];
-
-    const pending = history.filter((o: any) => 
-      o.status === 'completed' && (!o.reviews || o.reviews.length === 0)
-    );
-    
-    setOrders(pending);
-  } catch (err) {
-    console.error("Review fetch error:", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
-  useEffect(() => { fetchPendingReviews(); }, []);
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   if (loading) return <CircularProgress />;
 
@@ -51,35 +49,49 @@ const fetchPendingReviews = async () => {
       <Header active="profile" />
       <MainPart>
         <SideBar active="review" />
-        <InnerContainer >
-          <Typography variant="h4" sx={{ fontFamily: '"Kurale", serif', mb: 3 }}>
-            {t('pendingReviews')}
-          </Typography>
-
+        <InnerContainer>
           {orders.length > 0 ? (
-            orders.map(order => (
-              <OrderSection key={order.id} sx={{ mb: 2, p: 3 }}>
-                <OrderHeader>
-                  <Typography variant="h6" sx={{ fontFamily: '"Kurale", serif' }}>
-                    {t('orderDate')} {new Date(order.createdAt).toLocaleDateString()}
+            orders.map((order) => {
+              const isCompleted = order.status === 'completed';
+              const hasReview = order.reviews && order.reviews.length > 0;
+
+              return (
+                <OrderSection key={order.id} sx={{ mb: 2, p: 3, width: '90%' }}>
+                  <OrderHeader>
+                    <Typography variant="h6" sx={{ fontFamily: '"Kurale", serif' }}>
+                      {t('orderDate')} {new Date(order.createdAt).toLocaleDateString()}
+                    </Typography>
+
+                    {isCompleted && !hasReview && (
+                      <Button
+                        variant="contained"
+                        onClick={() => setSelectedOrderId(order.id)}
+                        sx={{ textTransform: 'none', fontFamily: '"Kurale", serif' }}
+                      >
+                        {t('leaveReview')}
+                      </Button>
+                    )}
+                  </OrderHeader>
+
+                  <Typography variant="body2" color="text.secondary">
+                    {t('orderContents')}{' '}
+                    {order.orderCatalog?.map((e: any) => e.catalog.name).join(', ') || '-'}
                   </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={() => setSelectedOrderId(order.id)}
-                    sx={{ textTransform: 'none', fontFamily: '"Kurale", serif' }}
-                  >
-                    {t('leaveReview')}
-                  </Button>
-                </OrderHeader>
-                <Typography variant="body2" color="text.secondary">
-                  {t('orderContents')} {order.orderCatalog.map((e: any) => e.catalog.name).join(', ')}
-                </Typography>
-              </OrderSection>
-            ))
+
+                  {isCompleted && hasReview && (
+                    <Typography variant="body2" color="success.main" sx={{ mt: 1 }}>
+                      ✓ {t('reviewLeft') || 'Отзыв оставлен'}
+                    </Typography>
+                  )}
+                </OrderSection>
+              );
+            })
           ) : (
             <Box sx={{ textAlign: 'center', mt: 5 }}>
               <img src="/favicon.png" style={{ width: 150, opacity: 0.5 }} alt="" />
-              <Typography variant="h5" sx={{ mt: 2 }}> {t('allReviewed')}</Typography>
+              <Typography variant="h5" sx={{ mt: 2 }}>
+                {t('noOrders') || 'У вас пока нет заказов'}
+              </Typography>
             </Box>
           )}
         </InnerContainer>
@@ -89,8 +101,7 @@ const fetchPendingReviews = async () => {
         open={!!selectedOrderId}
         onClose={() => setSelectedOrderId(null)}
         orderId={selectedOrderId || ''}
-        onSuccess={fetchPendingReviews}
-      />
+        onSuccess={fetchOrders} />
     </Container>
   );
 };

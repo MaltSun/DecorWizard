@@ -3,4 +3,5 @@ export interface HistoryCardProps {
   title: string;
   prompt: string;
   onClick?: () => void;
+  onDelete: () => void;
 }

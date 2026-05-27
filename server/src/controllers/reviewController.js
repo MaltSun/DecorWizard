@@ -8,7 +8,7 @@ export const createReview = async (req, res) => {
       return res.status(400).json({ error: "Недостаточно данных для отзыва" });
     }
 
-    const formattedMark = parseInt(mark, 10); 
+    const formattedMark = parseInt(mark, 10);
     const cleanOrderId = String(orderId).trim();
 
     const review = await prisma.review.create({
@@ -26,7 +26,7 @@ export const createReview = async (req, res) => {
     res.status(500).json({
       error: "Ошибка на бэкенде",
       message: error.message,
-      stack: error.stack, 
+      stack: error.stack,
     });
   }
 };
@@ -42,4 +42,42 @@ export const createAnswer = async (req, res) => {
   });
 
   res.status(201).json(answer);
+};
+
+export const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await prisma.review.findMany({
+       orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        order: {
+          select: {
+            createdAt: true,
+            user: {
+              select: {
+                name: true, 
+              },
+            },
+          },
+        },
+        answers: true,
+      },
+    });
+
+    const formattedReviews = reviews.map((review) => ({
+      id: review.id,
+      mark: review.mark,
+      text: review.text,
+      createdAt: review.createdAt,
+      customerName: review.order?.user?.name || "Аноним",
+      orderDate: review.order?.createdAt,
+      answer: review.answers.length > 0 ? review.answers[0] : null,
+    }));
+
+    res.status(200).json(formattedReviews);
+  } catch (error) {
+    console.error("Ошибка при получении отзывов:", error);
+    res.status(500).json({ error: "Не удалось загрузить отзывы" });
+  }
 };

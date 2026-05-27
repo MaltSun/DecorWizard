@@ -25,7 +25,8 @@ export function calculateTagWeights(
     const upperAns = ans.toUpperCase(); 
 
     const prior = index;
-    const likelihood = LIKELIHOOD_TABLE[upperAns as keyof typeof LIKELIHOOD_TABLE] || 0;
+    const likelihood = LIKELIHOOD_TABLE[upperAns as keyof 
+      typeof LIKELIHOOD_TABLE] || 0;
 
     const currentWeight = weights[tag] || 0;
     weights[tag] = currentWeight + (likelihood * prior);

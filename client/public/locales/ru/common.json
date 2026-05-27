@@ -26,5 +26,14 @@
   "personal_desserts": "Персональные десерты мечты",
   "contact_us": "Связаться с нами",
   "all_rights_reserved": "Все права защищены",
-  "noHistory": "У вас пока нет истории"
+  "noHistory": "У вас пока нет истории",
+  "weight": "Вес",
+  "flavor": "Начинка",
+  "quantity": "Количество",
+  "chooseDecor": "Выбрать этот декор",
+  "delete": "Удалить",
+  "reviews": "Отзывы",
+  "orders": "Мои заказы",
+  "marks": "Оценки",
+  "orders_history": "История заказов"
 }

@@ -1,12 +1,18 @@
 import ReactSlidy from 'react-slidy';
 import React, { useState } from 'react';
 import { SliderProps } from './type.js';
-import { Box, Typography, useTheme } from '@mui/material';
-import { ArticleContainer, ContainerBox } from './style.js';
-import 'react-slidy/lib/styles.css';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { ArticleContainer, ContainerBox, SliderCard } from './style.js';
+
+const TABLET_BREAKPOINT = 1100;
+const MOBILE_BREAKPOINT = 700;
 
 const Slider: React.FC<SliderProps> = ({ content }) => {
   const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down(MOBILE_BREAKPOINT));
+  const isTablet = useMediaQuery(theme.breakpoints.down(TABLET_BREAKPOINT));
+
   const [actualSlide, setActualSlide] = useState(0);
 
   const updateSlide = ({ currentSlide }) => {
@@ -29,22 +35,15 @@ const Slider: React.FC<SliderProps> = ({ content }) => {
         keyboardNavigation
       >
         {content.map(item => (
-          <Box
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <img style={{ width: '50%', borderRadius: '10px' }} alt={item.title} src={item.img} />
+          <SliderCard>
+            {!isMobile && (<img style={{ width: '50%', height: 'auto', borderRadius: '10px' }} alt={item.title} src={item.img} />)}
             <ArticleContainer>
               <Typography variant="h2">{item.title}</Typography>
               <Typography style={{ lineBreak: 'anywhere' }} variant="body1">
                 {item.description}
               </Typography>
             </ArticleContainer>
-          </Box>
+          </SliderCard>
         ))}
       </ReactSlidy>
       <div className="Dots">

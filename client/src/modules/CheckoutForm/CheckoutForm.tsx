@@ -23,59 +23,9 @@ const CheckoutForm = ({ amount, onSuccess, orderData, clientSecret }: CheckoutPa
   const { t } = useTranslation('cart');
 
   const [errorMessage, setErrorMessage] = useState<string>();
-  // const [clientSecret, setClientSecret] = useState('');
-  const [loading, setLoading] = useState(false);
+   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   fetch('http://localhost:5000/api/stripe/', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-  //     },
-  //     body: JSON.stringify({ amount: convertToSubcurrency(amount, 100) }),
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => setClientSecret(data.clientSecret))
-  //     .finally(() => setLoading(false));
-  // }, [amount]);
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   setLoading(true);
-
-  //   if (!stripe || !elements) {
-  //     return;
-  //   }
-
-  //   const { error: submitError } = await elements.submit();
-
-  //   if (submitError) {
-  //     setErrorMessage(submitError.message);
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   // const baseUrl = window.location.origin;
-  //   // const path = AppRoutes.Profile.Children.Order;
-
-  //   // const finalUrl = `${baseUrl}${path}?orderId=${orderId}`;
-
-  //   // console.log('Stripe перенаправит на:', finalUrl);
-
-  //   const { error } = await stripe.confirmPayment({
-  //     elements,
-  //     clientSecret,
-  //     confirmParams: {
-  //       return_url: `${window.location.origin}${AppRoutes.Profile.Children.Order}`,
-  //     },
-  //   });
-
-  //   if (error) {
-  //     toast.error(error.message);
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

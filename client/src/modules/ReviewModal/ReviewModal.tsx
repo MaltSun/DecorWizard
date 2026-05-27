@@ -41,10 +41,12 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ open, onClose, orderId
         <Modal open={open} onClose={onClose}>
             <Box sx={ModalStyle}>
                 <Typography variant="h5" sx={{ fontFamily: '"Kurale", serif', mb: 2 }}>
-                    Оставить отзыв
+                    {t('leaveReview')}
                 </Typography>
 
-                <Typography variant="body2" sx={{ mb: 1 }}>Ваша оценка:</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                    {t('yourRating')}
+                </Typography>
                 <Rating
                     value={mark}
                     onChange={(_, newValue) => setMark(newValue)}
@@ -56,7 +58,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ open, onClose, orderId
                     multiline
                     rows={4}
                     variant="outlined"
-                    placeholder="Поделитесь впечатлениями о тортике..."
+                    placeholder={t('shareImpressions')}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     sx={{ mb: 2 }}
@@ -68,7 +70,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ open, onClose, orderId
                     onClick={handleSubmit}
                     disabled={loading || !mark}
                 >
-                    {loading ? <CircularProgress size={24} /> : 'Отправить отзыв'}
+                    {loading ? <CircularProgress size={24} /> : t('submitReview')}
                 </StyledButton>
             </Box>
         </Modal>

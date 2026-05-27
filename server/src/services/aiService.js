@@ -13,7 +13,9 @@ export async function generateAIPrompt(userRequest) {
         Authorization: `Bearer ${config.API_KEY}`,
       },
       body: JSON.stringify({
-        inputs: userRequest,
+        inputs:
+          userRequest +
+          "Generate a detailed, photorealistic prompt for an image generation model",
         parameters: {
           max_new_tokens: 200,
           temperature: 0.7,

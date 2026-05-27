@@ -29,5 +29,14 @@
   "personal_desserts": "Personal desserts of your dreams",
   "contact_us": "Contact us",
   "all_rights_reserved": "All rights reserved",
-  "noHistory": "You don't have any history yet"
+  "noHistory": "You don't have any history yet",
+  "weight": "Weight",
+  "flavor": "Flavor",
+  "quantity": "Quantity",
+  "chooseDecor": "Choose this decor",
+  "delete": "Delete",
+  "reviews": "Reviews",
+  "orders": "My orders",
+  "marks": "Marks",
+  "orders_history": "Orders history"
 }

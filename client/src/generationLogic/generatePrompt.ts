@@ -17,10 +17,11 @@ export async function generatePromptFromResults(
       body: JSON.stringify({ request: userRequest }),
     });
     const data = await response.json();
-    console.log('Generated Prompt from Server:', data.prompt);
+
     return data.prompt;
   } catch (e) {
-    console.error('Failed to generate prompt:', e);
-    return `beautiful cake, photorealistic, detailed, 8k, professional photography ${userRequest}`;
+
+    return `beautiful cake, photorealistic, detailed, 8k, professional
+     photography ${userRequest}`;
   }
 }

@@ -7,11 +7,13 @@ import {
   StyledList,
   Container,
   UserAvatar,
-  StyledMovingIcon,
-  StyledGTranslateIcon,
-  StyledPortraitIcon,
+  StyledMarksIcon,
+  StyledRateIcon,  
   StyledListItemText,
+  StyledCakeIcon,
 } from './style';
+
+import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined';
 
 const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
   const navigate = useNavigate();
@@ -55,7 +57,7 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           sx={{ width: '100%' }}
         >
           <ListItemIcon>
-            <StyledMovingIcon isActive={active === 'order'} />
+            <StyledCakeIcon isActive={active === 'order'} />
           </ListItemIcon>
           <StyledListItemText primary={t('orders')} />
         </ListItemButton>
@@ -65,9 +67,9 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           sx={{ width: '100%' }}
         >
           <ListItemIcon>
-            <StyledGTranslateIcon isActive={active === 'review'} />
+            <StyledRateIcon isActive={active === 'review'} />
           </ListItemIcon>
-          <StyledListItemText primary={t('reviews')} />
+          <StyledListItemText primary={t('orders_history')} />
         </ListItemButton>
         <ListItemButton
           selected={active === 'answer'}
@@ -75,9 +77,9 @@ const SideBar: React.FC<SideBarProps> = ({ active = 'profile' }) => {
           sx={{ width: '100%' }}
         >
           <ListItemIcon>
-            <StyledPortraitIcon isActive={active === 'answer'} />
+            <StyledMarksIcon isActive={active === 'answer'} />
           </ListItemIcon>
-          <StyledListItemText primary={t('answers')} />
+          <StyledListItemText primary={t('reviews')} />
         </ListItemButton>
       </Container>
     </StyledList>

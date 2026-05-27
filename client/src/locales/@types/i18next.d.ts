@@ -7,6 +7,7 @@ import type steps from '../locales/ru/steps.json';
 import type catalog from '../locales/ru/catalog.json';
 import type cart from '../locales/ru/cart.json';
 import type reviews from '../locales/ru/reviews.json';
+import type treeSurvey from '../locales/ru/treeSurvey.json';
 
 type Resources = {
   common: typeof common;
@@ -18,6 +19,7 @@ type Resources = {
   catalog: typeof catalog;
   cart: typeof cart;
   reviews: typeof reviews;
+  treeSurvey: typeof treeSurvey;
 };
 
 declare module 'i18next' {

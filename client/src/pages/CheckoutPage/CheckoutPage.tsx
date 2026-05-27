@@ -8,6 +8,8 @@ import { CircularProgress, Typography } from '@mui/material';
 import { Container } from './style';
 import { useTranslation } from 'react-i18next';
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
+ 
 export const CheckoutPage = () => {
   const location = useLocation();
   const data = location.state as {
@@ -18,8 +20,7 @@ export const CheckoutPage = () => {
   } | null;
   const { t } = useTranslation('cart');
 
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
-
+ 
   if (!data || !data.clientSecret) {
     return (
       <Container>

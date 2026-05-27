@@ -6,7 +6,6 @@ import { HistoryCardProps } from '../../components/HistoryCard/type';
 import HistoryCard from '../../components/HistoryCard/HistoryCard';
 import { Typography } from '@mui/material';
 import { AddToCartForm } from '../../modules/AddToCartForm/AddToCartForm';
-import Footer from '../../components/Footer/Footer';
 
 const History = () => {
   const { t } = useTranslation(['common']);
@@ -20,8 +19,13 @@ const History = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleDelete = (title: string) => {
+    const updatedHistory = data.filter(card => card.title !== title);
+    sessionStorage.setItem('history', JSON.stringify(updatedHistory));
+  }
 
-  const handleOpen = () => {
+  const handleOpen = (card: HistoryCardProps) => {
+    setSelectedCard(card);
     setOpen(true);
   };
 
@@ -35,14 +39,15 @@ const History = () => {
               <HistoryCard
                 key={index}
                 {...card}
-                onClick={() => handleOpen()}
+                onClick={() => handleOpen(card)}
+                onDelete={() => handleDelete(card.title)}
               />
             ))}
           </ContentContainer>
 
-          {isOpen && (
+          {isOpen && selectedCard && (
             <AddToCartForm
-              img={selectedCard?.imageSrc}
+              img={selectedCard.imageSrc}
               onClose={handleClose}
             />
           )}

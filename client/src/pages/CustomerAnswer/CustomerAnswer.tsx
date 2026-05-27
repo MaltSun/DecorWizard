@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { ReviewSection, OwnerAnswer } from './style'; 
+import { ReviewSection, OwnerAnswer } from './style';
 import { Box, CircularProgress, Rating, Typography } from '@mui/material';
 import { Container, MainPart, InnerContainer } from '../Customer/style';
 import Header from '../../components/Header/Header';
 import SideBar from '../../components/SideBar/SideBar';
 import { useTranslation } from 'react-i18next';
+import theme from '../../../theme/theme';
 
 export const CustomerAnswer = () => {
   const [orders, setOrders] = useState<any[]>([]);
@@ -19,11 +20,10 @@ export const CustomerAnswer = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
-        
-        // Объединяем активные и историю, затем фильтруем те, где ЕСТЬ отзывы
+
         const allOrders = [...(data.active || []), ...(data.history || [])];
         const reviewed = allOrders.filter((o: any) => o.reviews && o.reviews.length > 0);
-        
+
         setOrders(reviewed);
       } catch (err) {
         console.error("Fetch reviewed orders error:", err);
@@ -42,21 +42,17 @@ export const CustomerAnswer = () => {
       <MainPart>
         <SideBar active="answer" />
         <InnerContainer>
-          <Typography variant="h4" sx={{ fontFamily: '"Kurale", serif', mb: 3 }}>
-            {t('reviews:yourReviews')}
-          </Typography>
-
           {orders.length > 0 ? (
             orders.map(order => {
-              const review = order.reviews[0]; // Берем первый отзыв
-              const ownerAnswer = review.answers && review.answers[0]; // Берем первый ответ кондитера
+              const review = order.reviews[0];
+              const ownerAnswer = review.answers && review.answers[0];
 
               return (
-                <ReviewSection key={order.id} sx={{ mb: 3, p: 2, border: '1px solid #eee', borderRadius: 2 }}>
+                <ReviewSection key={order.id} sx={{ mb: 3, p: 2, border: '1px solid #eee', borderRadius: 2, width: '90%' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                     <Rating value={review.mark} readOnly />
                     <Typography variant="caption" color="text.secondary">
-                      Заказ от {new Date(order.createdAt).toLocaleDateString()}
+                      {t('reviews:orderDate')} {new Date(order.createdAt).toLocaleDateString()}
                     </Typography>
                   </Box>
 
@@ -65,9 +61,9 @@ export const CustomerAnswer = () => {
                   </Typography>
 
                   {ownerAnswer ? (
-                    <OwnerAnswer sx={{ mt: 2, p: 2, bgcolor: '#f0f7ff', borderRadius: 1, borderLeft: '4px solid #1976d2' }}>
+                    <OwnerAnswer sx={{ mt: 2, p: 2, bgcolor: `${theme.palette.background.default}`, borderRadius: 1, borderLeft: `4px solid ${theme.palette.primary}` }}>
                       <Typography variant="subtitle2" color="primary" sx={{ fontWeight: 800, mb: 0.5 }}>
-                        Кондитер ответил:
+                        {t('reviews:ownerResponse')}
                       </Typography>
                       <Typography variant="body2">
                         {ownerAnswer.text}
@@ -75,7 +71,7 @@ export const CustomerAnswer = () => {
                     </OwnerAnswer>
                   ) : (
                     <Typography variant="caption" sx={{ opacity: 0.6, display: 'block', mt: 1 }}>
-                      Ожидаем ответ от кондитера...
+                      {t('reviews:waitingForOwnerResponse')}
                     </Typography>
                   )}
                 </ReviewSection>
@@ -83,7 +79,7 @@ export const CustomerAnswer = () => {
             })
           ) : (
             <Typography sx={{ textAlign: 'center', mt: 10, opacity: 0.5 }}>
-              Вы еще не оставляли отзывов.
+              {t('reviews:noReviews')}
             </Typography>
           )}
         </InnerContainer>

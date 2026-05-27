@@ -1,4 +1,5 @@
 import { alpha, Box, Button, Paper, Stack, styled } from '@mui/material';
+import theme from '../../../theme/theme';
 
 export const FormPaper = styled(Paper)(({ theme }) => ({
   width: '60%',
@@ -9,16 +10,23 @@ export const FormPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
 }));
 
-export const FormStack = styled(Stack)(({ theme }) => ({
-  display: 'flex',
+export const ModalStyle = {
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  borderRadius: '16px',
+  boxShadow: 24,
+  p: 4, display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
-  padding: theme.spacing(10),
-  gap: theme.spacing(5),
-  background: 'transparent',
-  spacing: theme.spacing(5),
-}));
+  padding: theme.spacing(5),
+  gap: theme.spacing(2),
+};
+
 
 export const FormButton = styled(Button)(() => ({
   height: 45,
@@ -32,7 +40,7 @@ export const FormBox = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   padding: 2,
   flexDirection: 'column',
-   backgroundColor: alpha(theme.palette.background.paper, 0.75),
+  backgroundColor: alpha(theme.palette.background.paper, 0.75),
   position: 'absolute',
   top: 0,
   left: 0,

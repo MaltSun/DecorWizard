@@ -24,5 +24,9 @@
   "price": "Price",
   "total_amount": "Total amount",
   "wishes_design_description": "Wishes for design and decoration",
-  "need_to_login": "You need to log in to place an order"
+  "need_to_login": "You need to log in to place an order",
+  "success_added_to_cart": "Cake with your design added to cart!",
+  "flawor_not_found": "Flawor not selected",
+  "error_adding_to_cart": "Error adding to cart. Please select flawor and weight.",
+  "order_submission_error": "Error creating order"
  }

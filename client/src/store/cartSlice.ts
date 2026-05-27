@@ -41,18 +41,22 @@ export const cartStore = create<IStore>()(
 
       addFromWizard: (item: CartItem) => {
         const cart = get().cart;
-        const existingItem = cart.find(cartItem => cartItem.id === item.id);
+        const existingItem = cart.find(
+          cartItem => cartItem.id === item.id && cartItem.image === item.image
+        );
 
         if (existingItem) {
           set({
             cart: cart.map(cartItem =>
-              cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + item.quantity, weight: item.weight } : cartItem
+              (cartItem.id === item.id && cartItem.image === item.image)
+                ? { ...cartItem, quantity: cartItem.quantity + item.quantity, weight: item.weight }
+                : cartItem
             ),
           });
         } else {
           set({ cart: [...cart, item] });
         }
-      },  
+      },
 
       remove: (id: string) =>
         set(state => ({
@@ -80,8 +84,8 @@ export const cartStore = create<IStore>()(
       },
     }),
     {
-      name: 'cart-storage', 
-      storage: createJSONStorage(() => sessionStorage), 
+      name: 'cart-storage',
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

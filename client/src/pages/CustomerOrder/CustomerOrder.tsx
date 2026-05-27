@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { InnerContainer, OrderBlock, OrderFooter, OrderHeader, OrderSection, TotalPrice } from './style';
 
 export const CustomerOrder = () => {
-  const [orders, setOrders] = useState({ active: []});
+  const [orders, setOrders] = useState({ active: [] });
   const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ export const CustomerOrder = () => {
 
   const renderOrderList = (orderList: any[]) =>
     orderList.map((order: any) => {
-       const totalOrderSum = order.orderCatalog.reduce(
+      const totalOrderSum = order.orderCatalog.reduce(
         (acc: number, entry: any) => acc + entry.catalog.price * entry.quantity,
         0
       );
@@ -83,7 +83,7 @@ export const CustomerOrder = () => {
             {order.orderCatalog.map((entry: any) => (
               <OrderCard
                 key={entry.id}
-                img={entry.catalog.image}
+                img={!order.design ? entry.catalog.image : order.design}
                 name={entry.catalog.name}
                 price={entry.catalog.price}
                 quantity={entry.quantity}
@@ -91,7 +91,7 @@ export const CustomerOrder = () => {
             ))}
           </OrderBlock>
 
-           <OrderFooter>
+          <OrderFooter>
             <Typography variant="body1" sx={{ color: 'text.secondary' }}>
               {t('total_amount') || 'Итого'}:
             </Typography>

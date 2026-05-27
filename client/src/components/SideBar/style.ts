@@ -1,9 +1,9 @@
 import { Avatar, List, Stack, styled, Box, ListItemText } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
-import MovingIcon from '@mui/icons-material/Moving';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import PortraitIcon from '@mui/icons-material/Portrait';
-import GTranslateIcon from '@mui/icons-material/GTranslate';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import StarOutlineOutlinedIcon from '@mui/icons-material/StarOutlineOutlined';
+import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 
 export const StyledList = styled(List)(({ theme }) => ({
   display: 'flex',
@@ -41,33 +41,25 @@ export const UserAvatar = styled(Avatar)(({ theme }) => ({
   height: '40px',
 }));
 
-export const BackIcon = styled(ArrowBackIosNewIcon)(({ theme }) => ({
-  cursor: 'pointer',
-  height: theme.spacing(5),
-  '&:hover': {
-    color: theme.palette.primary.main,
-  },
-}));
-
 export const StyledGroupIcon = styled(GroupIcon, {
   shouldForwardProp: prop => prop !== 'isActive',
 })<{ isActive?: boolean }>(({ theme, isActive }) => ({
   color: isActive ? 'red' : theme.palette.text.disabled,
 }));
 
-export const StyledMovingIcon = styled(MovingIcon, {
+export const StyledMarksIcon = styled(StarOutlineOutlinedIcon, {
   shouldForwardProp: prop => prop !== 'isActive',
 })<{ isActive?: boolean }>(({ theme, isActive }) => ({
   color: isActive ? theme.palette.text.primary : theme.palette.text.disabled,
 }));
 
-export const StyledGTranslateIcon = styled(GTranslateIcon, {
+export const StyledCakeIcon = styled(CakeOutlinedIcon, {
   shouldForwardProp: prop => prop !== 'isActive',
 })<{ isActive?: boolean }>(({ theme, isActive }) => ({
   color: isActive ? theme.palette.text.primary : theme.palette.text.disabled,
 }));
 
-export const StyledPortraitIcon = styled(PortraitIcon, {
+export const StyledRateIcon = styled(RateReviewOutlinedIcon, {
   shouldForwardProp: prop => prop !== 'isActive',
 })<{ isActive?: boolean }>(({ theme, isActive }) => ({
   color: isActive ? theme.palette.text.primary : theme.palette.text.disabled,

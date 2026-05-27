@@ -30,12 +30,16 @@ export const OrderForm = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('cart');
 
+  // OrderForm.tsx
+
   const cartItems = cart
     .map(cartItem => {
       const product = catalog.find(p => p.id === cartItem.id);
       if (!product) return null;
+
       return {
         ...product,
+        image: cartItem.image || product.image,
         quantity: cartItem.quantity,
         weight: cartItem.weight ?? 0,
         subtotal: Number(product.price) * cartItem.quantity,
@@ -72,31 +76,48 @@ export const OrderForm = () => {
     setLoading(true);
     try {
       if (cart.length === 0) {
-        toast.warn('Корзина пуста');
+        toast.warn(t('cart:empty_cart'));
         return;
       }
+
       const token = sessionStorage.getItem('token');
       if (!token) {
-        toast.error('Необходима авторизация. Пожалуйста, войдите в аккаунт.');
+        toast.error(t('cart:need_to_login'));
         navigate(AppRoutes.Login);
         return;
       }
+
+      const customDesignItem = cart.find(item => item.image);
+
       const response = await fetch('http://localhost:5000/api/orders/', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, items: cart }),
+        body: JSON.stringify({
+          ...formData,
+          design: customDesignItem ? customDesignItem.image : '',
+          items: cart.map(item => ({
+            catalogId: item.id,
+            weight: item.weight,
+            quantity: item.quantity,
+          }))
+        }),
       });
 
       const { orderId, clientSecret } = await response.json();
+
+      cartStore.getState().clear();
 
       navigate(AppRoutes.Order.Children.Checkout, {
         state: { orderId, clientSecret, totalPrice },
       });
     } catch (err) {
-      toast.error('Ошибка создания заказа');
+      toast.error(t('cart:order_submission_error'), {
+        position: 'top-right',
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SwitchButton } from './type';
 import theme from '../../../theme/theme';
+import { buttonStyles, flagStyles } from './style';
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n } = useTranslation();
@@ -12,23 +12,17 @@ const LanguageSwitcher: React.FC = () => {
     sessionStorage.setItem('i18nextLng', newLang);
   };
 
+  const isEnglish = i18n.language === 'en';
+
+
+
   return (
-    <button
-      style={{
-        width: '60px',
-        border: '2px solid',
-        borderRadius: '20px',
-        padding: '5px',
-        color: theme.palette.text.primary,
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        background: 'transparent',
-        fontWeight: 'bold',
-        fontSize: '20px',
-      }}
-      onClick={toggleLanguage}
-    >
-      {i18n.language === 'en' ? 'RU' : 'EN'}  
+    <button style={buttonStyles} onClick={toggleLanguage}>
+      <img
+        src={isEnglish ? '/images/flags/ru.png' : '/images/flags/en.png'}
+        alt={isEnglish ? 'Русский' : 'English'}
+        style={flagStyles}
+      />
     </button>
   );
 };

@@ -42,18 +42,21 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
   const catalog = useCatalogStore.getState().catalog;
 
-  const cartItems = cart
-    .map(cartItem => {
-      const product = catalog.find(p => p.id === cartItem.id);
-      if (!product) return null;
+ // CartDrawer.tsx
 
-      return {
-        ...product,
-        quantity: cartItem.quantity,
-        subtotal: Number(product.price) * cartItem.quantity,
-      };
-    })
-    .filter(Boolean);
+const cartItems = cart
+  .map(cartItem => {
+    const product = catalog.find(p => p.id === cartItem.id);
+    if (!product) return null;
+
+    return {
+      ...product,
+      image: cartItem.image || product.image, 
+      quantity: cartItem.quantity,
+      subtotal: Number(product.price) * cartItem.quantity,
+    };
+  })
+  .filter(Boolean);
 
   const totalPrice = cartItems.reduce((sum, item) => sum + (item?.subtotal || 0), 0);
   const isEmpty = cart.length === 0;

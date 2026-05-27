@@ -6,6 +6,7 @@ import type { DecorElement } from '../../models/DecorElements';
 import { AnswerOption } from '../../models/type';
 import { Button, Typography } from '@mui/material';
 import { ButtonContainer, ContentContainer } from './style';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   reasonabilityIndex: number;
@@ -17,6 +18,8 @@ const DecorQuestions: React.FC<Props> = ({ reasonabilityIndex, collectedTags }) 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [finished, setFinished] = useState(false);
   const [decorIndex, setDecorIndex] = useState(0);
+
+  const [t] = useTranslation('treeSurvey')
 
   const handleAnswer = (tag: string, ans: AnswerOption) => {
     setAnswers(prev => ({ ...prev, [tag]: ans }));
@@ -54,7 +57,7 @@ const DecorQuestions: React.FC<Props> = ({ reasonabilityIndex, collectedTags }) 
       <ButtonContainer>
         {[AnswerOption.YES, AnswerOption.MAYBE, AnswerOption.IDK, AnswerOption.NO].map(ans => (
           <Button variant='contained' key={ans} onClick={() => handleAnswer(current.tag, ans)}>
-            {ans.toUpperCase()}
+            {t(ans.toUpperCase())}
           </Button>
         ))}
       </ButtonContainer>

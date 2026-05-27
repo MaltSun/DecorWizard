@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FormPaper, FormStack, FormButton, FormBox, FormImage } from './style';
+import { FormPaper, FormButton, FormBox, FormImage, ModalStyle } from './style';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Button, CircularProgress, List, MenuItem, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, List, MenuItem, Modal, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrderFormData, OrderUserSchema } from './type';
@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => void }) => {
   const { cart, update, remove, clear, getTotalItems } = cartStore();
   const [generalLoading, setLoading] = useState(false);
+
+  const [t] = useTranslation(['cart', 'common']);
 
   const { catalog, loading, error, fetchCatalog } = useCatalogStore();
   const addToCart = cartStore(state => state.addFromWizard);
@@ -37,7 +39,6 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
     },
   });
 
-  const { t } = useTranslation('common');
   const navigate = useNavigate();
 
   const onSubmit = (data: OrderFormData) => {
@@ -46,33 +47,26 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
       const selectedCatalogItem = catalog.find(c => c.id === data.flaworId);
 
       if (!selectedCatalogItem) {
-        throw new Error('Товар не найден');
+        throw new Error(t('cart:flawor_not_found'));
       }
 
       const itemToAdd = {
         id: data.flaworId,
-        weight: data.weight || 1.5,
-        quantity: data.quantity || 1,
+        weight: data.weight,
+        quantity: data.quantity,
         image: img,
       };
 
       handleAddToCart(itemToAdd);
 
-      toast.success('Товар добавлен в корзину', {
-        theme: 'colored',
-        position: 'top-center',
-        autoClose: 3000,
+      toast.success(t('success_added_to_cart'), {
+        position: 'top-right',
+        autoClose: 2000,
       });
-
       reset();
       onClose();
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      toast.error('Ошибка при добавлении товара', {
-        theme: 'colored',
-        position: 'top-center',
-        autoClose: 5000,
-      });
+      toast.error(t('cart:error_adding_to_cart'));
     } finally {
       setLoading(false);
     }
@@ -94,78 +88,74 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
   }
 
   return (
-    <FormBox>
-      <FormPaper elevation={0}>
-        <form  onSubmit={handleFormSubmit}>
-          <FormStack>
-            <FormImage src={img} alt="Product" />
+    <Modal open={true} onClose={onClose}>
+      <Box sx={ModalStyle}>
+        <FormImage src={img} alt="Product" />
 
-            {!catalog || catalog.length === 0 ? (
-              <CircularProgress />
-            ) : (
-              <TextField
-                {...register('flaworId')}
-                select
-                label={t('flawor')}
-                fullWidth
-                error={!!errors.flaworId}
-                helperText={errors.flaworId?.message}
-                required
-              >
-                {catalog.map(c => (
-                  <MenuItem key={c.id} value={c.id}>
-                    {c.name} - {Number(c.price)} ₽
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
+        {!catalog || catalog.length === 0 ? (
+          <CircularProgress />
+        ) : (
+          <TextField
+            {...register('flaworId')}
+            select
+            label={t('common:flavor')}
+            fullWidth
+            error={!!errors.flaworId}
+            helperText={errors.flaworId?.message}
+            required
+          >
+            {catalog.map(c => (
+              <MenuItem key={c.id} value={c.id}>
+                {c.name} - {Number(c.price)} ₽
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
 
-            <TextField
-              {...register('weight', { valueAsNumber: true })}
-              label={t('weight')}
-              type="number"
-              variant="outlined"
-              fullWidth
-              error={!!errors.weight}
-              helperText={errors.weight?.message}
-              InputProps={{ inputProps: { min: 0.1, step: 0.1 } }}
-              required
-            />
+        <TextField
+          {...register('weight', { valueAsNumber: true })}
+          label={t('common:weight')}
+          type="number"
+          variant="outlined"
+          fullWidth
+          error={!!errors.weight}
+          helperText={errors.weight?.message}
+          InputProps={{ inputProps: { min: 0.1, step: 0.1 } }}
+          required
+        />
 
-            <TextField
-              {...register('quantity', { valueAsNumber: true })}
-              label={t('quantity')}
-              type="number"
-              variant="outlined"
-              fullWidth
-              error={!!errors.quantity}
-              helperText={errors.quantity?.message}
-              InputProps={{ inputProps: { min: 1 } }}
-              defaultValue={1}
-              required
-            />
+        <TextField
+          {...register('quantity', { valueAsNumber: true })}
+          label={t('common:quantity')}
+          type="number"
+          variant="outlined"
+          fullWidth
+          error={!!errors.quantity}
+          helperText={errors.quantity?.message}
+          InputProps={{ inputProps: { min: 1 } }}
+          defaultValue={1}
+          required
+        />
 
-            <FormButton
-              variant="contained"
-              fullWidth
-              type="submit"
-              disabled={generalLoading || !catalog.length}
-            >
-              {generalLoading ? <CircularProgress size={24} /> : t('addToCart')}
-            </FormButton>
+        <FormButton
+          variant="contained"
+          fullWidth
+          type="submit"
+          disabled={generalLoading || !catalog.length}
+        >
+          {generalLoading ? <CircularProgress size={24} /> : t('cart:add_to_cart')}
+        </FormButton>
 
-            <FormButton
-              variant="outlined"
-              size="large"
-              disabled={generalLoading}
-              fullWidth
-              onClick={onClose}
-            >
-              {t('cancel')}
-            </FormButton>
-          </FormStack>
-        </form>
-      </FormPaper>
-    </FormBox>
+        <FormButton
+          variant="outlined"
+          size="large"
+          disabled={generalLoading}
+          fullWidth
+          onClick={onClose}
+        >
+          {t('cart:cancel')}
+        </FormButton>
+      </Box>
+    </Modal>
   );
 };

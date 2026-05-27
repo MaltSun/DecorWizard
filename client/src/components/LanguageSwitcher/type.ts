@@ -7,3 +7,4 @@ export const SwitchButton = styled(Button)(({ theme }) => ({
   fontSize: '27px',
   color: theme.palette.primary.main,
 }));
+
