@@ -86,75 +86,77 @@ export const AddToCartForm = ({ img, onClose }: { img: string; onClose: () => vo
       </FormBox>
     );
   }
-
+  console.log('error', errors);
   return (
     <Modal open={true} onClose={onClose}>
       <Box sx={ModalStyle}>
-        <FormImage src={img} alt="Product" />
 
-        {!catalog || catalog.length === 0 ? (
-          <CircularProgress />
-        ) : (
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <input type="hidden" value={img} {...register('img')} />
+          <FormImage src={img} alt="Product" />
+
+          {!catalog || catalog.length === 0 ? (
+            <CircularProgress />
+          ) : (
+            <TextField
+              {...register('flaworId')}
+              select
+              label={t('common:flavor')}
+              fullWidth
+              error={!!errors.flaworId}
+              helperText={errors.flaworId?.message}
+              required
+            >
+              {catalog.map(c => (
+                <MenuItem key={c.id} value={c.id}>
+                  {c.name} - {Number(c.price)} ₽
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+
           <TextField
-            {...register('flaworId')}
-            select
-            label={t('common:flavor')}
+            {...register('weight', { valueAsNumber: true })}
+            label={t('common:weight')}
+            type="number"
+            variant="outlined"
             fullWidth
-            error={!!errors.flaworId}
-            helperText={errors.flaworId?.message}
+            error={!!errors.weight}
+            helperText={errors.weight?.message}
+            InputProps={{ inputProps: { min: 0.1, step: 0.1 } }}
             required
+          />
+
+          <TextField
+            {...register('quantity', { valueAsNumber: true })}
+            label={t('common:quantity')}
+            type="number"
+            variant="outlined"
+            fullWidth
+            error={!!errors.quantity}
+            helperText={errors.quantity?.message}
+            InputProps={{ inputProps: { min: 1 } }}
+            required
+          />
+
+          <FormButton
+            variant="contained"
+            fullWidth
+            type="submit"
+            disabled={generalLoading || !catalog.length}
           >
-            {catalog.map(c => (
-              <MenuItem key={c.id} value={c.id}>
-                {c.name} - {Number(c.price)} ₽
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
+            {generalLoading ? <CircularProgress size={24} /> : t('cart:add_to_cart')}
+          </FormButton>
 
-        <TextField
-          {...register('weight', { valueAsNumber: true })}
-          label={t('common:weight')}
-          type="number"
-          variant="outlined"
-          fullWidth
-          error={!!errors.weight}
-          helperText={errors.weight?.message}
-          InputProps={{ inputProps: { min: 0.1, step: 0.1 } }}
-          required
-        />
-
-        <TextField
-          {...register('quantity', { valueAsNumber: true })}
-          label={t('common:quantity')}
-          type="number"
-          variant="outlined"
-          fullWidth
-          error={!!errors.quantity}
-          helperText={errors.quantity?.message}
-          InputProps={{ inputProps: { min: 1 } }}
-          defaultValue={1}
-          required
-        />
-
-        <FormButton
-          variant="contained"
-          fullWidth
-          type="submit"
-          disabled={generalLoading || !catalog.length}
-        >
-          {generalLoading ? <CircularProgress size={24} /> : t('cart:add_to_cart')}
-        </FormButton>
-
-        <FormButton
-          variant="outlined"
-          size="large"
-          disabled={generalLoading}
-          fullWidth
-          onClick={onClose}
-        >
-          {t('cart:cancel')}
-        </FormButton>
+          <FormButton
+            variant="contained"
+            fullWidth
+            type="button"
+            disabled={generalLoading || !catalog.length}
+            onClick={handleSubmit(onSubmit)}   >
+            {generalLoading ? <CircularProgress size={24} /> : t('cart:add_to_cart')}
+          </FormButton>
+        </form>
       </Box>
     </Modal>
   );
