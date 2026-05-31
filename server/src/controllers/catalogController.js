@@ -1,13 +1,13 @@
-import { config } from "../config/index.js";
+import {  prisma } from "../config/prisma.js";
 
 export const getAllCatalog = async (req, res) => {
-  const items = await config.catalog.findMany();
+  const items = await prisma.catalog.findMany();
   res.json(items);
 };
 
 export const getCatalogItem = async (req, res) => {
   const { id } = req.params;
-  const item = await config.catalog.findUnique({ where: { id } });
+  const item = await prisma.catalog.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Товар не найден" });
   res.json(item);
 };
@@ -28,7 +28,7 @@ export const createCatalogItem = async (req, res) => {
     carbs,
   } = req.body;
 
-  const newItem = await config.catalog.create({
+  const newItem = await prisma.catalog.create({
     data: {
       name,
       description,
@@ -50,6 +50,6 @@ export const deleteCatalogItem = async (req, res) => {
     return res.status(403).json({ error: "Только владелец" });
 
   const { id } = req.params;
-  await config.catalog.delete({ where: { id } });
+  await prisma.catalog.delete({ where: { id } });
   res.status(204).send();
 };

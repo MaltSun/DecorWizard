@@ -1,19 +1,42 @@
-import { generateAIPrompt } from '../services/aiService.js';
-import { config } from '../config/index.js';
+import { generateAIPrompt } from "../services/aiService.js";
 
 export async function generateImage(req, res) {
-  try {
-    const { prompt } = req.body;
+  const { prompt } = req.body;
 
-    if (!prompt?.trim()) {
-      return res.status(400).json({ error: "Поле 'prompt' обязательно" });
+  if (!prompt?.trim())
+    return res.status(400).json({ error: "Prompt required" });
+
+  try {
+    const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
+    const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
+
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      },
+    );
+
+    if (!response.ok) {
+      return res.status(500).json({ error: "Cloudflare API error" });
     }
 
-    const imageUrl = config.POLLINATIONS_URL + encodeURIComponent(prompt.trim());
+    const data = await response.json();
 
-    res.json({ image: imageUrl });
+    if (data.result && data.result.image) {
+      const imageUrl = `data:image/jpeg;base64,${data.result.image}`;
+      return res.json({ imageUrl });
+    }
+
+    res.status(500).json({ error: "No image in response" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ error: "Generation failed" });
   }
 }
 

@@ -1,0 +1,15 @@
+{
+  "leaveReview": "Write a Review",
+  "yourReview": "Your Review",
+  "submit": "Submit",
+  "orderContents": "Order Contents:",
+  "orderDate": "Order Date:",
+  "pendingReviews": "Pending Reviews",
+  "allReviewed": "All orders have been reviewed.",
+  "ownerResponse": "Owner's Response",
+  "waitingForOwnerResponse": "Waiting for owner's response...",
+  "noReviews": "You haven't left any reviews yet.",
+  "shareImpressions": "Share your impressions about the cake...",
+  "yourRating": "Your Rating",
+  "submitReview": "Submit Review"
+}

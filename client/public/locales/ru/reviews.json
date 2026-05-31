@@ -1,0 +1,16 @@
+{
+  "writeReview": "Написать отзыв",
+  "yourReview": "Ваш отзыв",
+  "submit": "Отправить",
+  "orderContents": "Состав заказа:",
+  "orderDate": "Дата заказа:",
+  "pendingReviews": "Ожидающие отзывы",
+  "allReviewed": "Все заказы были от reviews.",
+  "leaveReview": "Написать отзыв",
+  "ownerResponse": "Ответ кондитера",
+  "waitingForOwnerResponse": "Ожидаем ответ от кондитера...",
+  "noReviews": "Вы еще не оставляли отзывов.",
+  "shareImpressions": "Поделитесь впечатлениями о тортике...",
+  "yourRating": "Ваша оценка",
+  "submitReview": "Отправить отзыв"
+}

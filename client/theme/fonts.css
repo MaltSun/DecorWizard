@@ -1,0 +1,21 @@
+/* Irish Grover */
+@font-face {
+  font-family: 'Irish Grover';
+  src: url('../assets/fonts/IrishGrover/irishgrover-regular.woff2') format('woff2'),
+       url('../assets/fonts/IrishGrover/irishgrover-regular.woff') format('woff'),
+       url('../assets/fonts/IrishGrover/IrishGrover-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Katibeh */
+@font-face {
+  font-family: 'Katibeh';
+  src: url('../assets/fonts/Katibeh/katibeh-regular.woff2') format('woff2'),
+       url('../assets/fonts/Katibeh/katibeh-regular.woff') format('woff'),
+       url('../assets/fonts/Katibeh/Katibeh-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

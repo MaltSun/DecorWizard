@@ -4,12 +4,13 @@ import { getAllCatalog, getCatalogItem, createCatalogItem, deleteCatalogItem } f
 
 const router = Router();
 
+// Публичные маршруты (не требуют аутентификации)
 router.get('/', getAllCatalog);
 router.get('/:id', getCatalogItem);
 
-// Только для владельца
-router.use(authenticate, requireRole('OWNER'));
-router.post('/', createCatalogItem);
-router.delete('/:id', deleteCatalogItem);
+// Защищенные маршруты (требуют аутентификации)
+router.post('/', authenticate, createCatalogItem);
+router.put('/:id', authenticate,createCatalogItem);
+router.delete('/:id',authenticate, deleteCatalogItem);
 
 export default router;
